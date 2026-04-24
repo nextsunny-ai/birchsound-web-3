@@ -12,12 +12,9 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{background:var(--bg);color:var(--ink-0);overflow-x:hidden}
+body{background:var(--bg);color:var(--ink-0);overflow-x:hidden;font-feature-settings:"ss01","cv11","tnum"}
 
-/* Korean text should not break mid-word */
-[data-ko], .i18n, .i18n-html, [style*="var(--ko)"] {
-  word-break: keep-all;
-}
+[data-ko], .i18n, .i18n-html {word-break:keep-all}
 a{color:inherit;text-decoration:none}
 ul{list-style:none}
 img{display:block;max-width:100%}
@@ -42,22 +39,38 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 }
 @media(max-width:768px){:root{--px:18px}}
 
-.metatag{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;line-height:1.5}
+::selection{background:var(--accent);color:var(--ink-0)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+html{scrollbar-width:thin;scrollbar-color:var(--accent) transparent}
+
+.metatag{font-family:'JetBrains Mono','Pretendard','IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;line-height:1.5;color:var(--ink-2)}
 .content-max{max-width:var(--max-w);margin:0 auto}
 
 .fade-up{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
 .fade-up.visible{opacity:1;transform:translateY(0)}
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px var(--px);display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,12,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+/* Noise overlay */
+.noise{position:relative}
+.noise::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");mix-blend-mode:overlay;opacity:.5}
+
+/* Hair rules */
+.hr-thin{height:1px;background:linear-gradient(90deg,transparent,rgba(232,228,220,.3),transparent)}
+
+/* NAV — hidden by default, appears on scroll */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px var(--px);display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,12,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transform:translateY(-100%);opacity:0;transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .35s ease}
+.nav.visible{transform:translateY(0);opacity:1}
 .nav-logo{display:flex;align-items:center}
 .nav-logo img{height:24px;width:auto}
-.nav-links{display:flex;gap:28px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.nav-links{display:flex;gap:28px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nav-links a{color:var(--ink-2);transition:color .2s}
 .nav-links a:hover{color:var(--accent)}
 .nav-right{display:flex;align-items:center;gap:16px}
-.lang-toggle{padding:5px 12px;border:1px solid var(--border-strong);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-0);background:transparent;cursor:pointer;transition:all .2s}
+.lang-toggle{padding:5px 12px;border:1px solid var(--border-strong);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-0);background:transparent;cursor:pointer;transition:all .2s;min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
 .lang-toggle:hover{border-color:var(--accent);color:var(--accent)}
-.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px;min-height:44px;min-width:44px;align-items:center;justify-content:center}
 .hamburger span{display:block;width:20px;height:1.5px;background:var(--ink-0)}
 @media(max-width:768px){
   .nav-links{display:none}
@@ -67,20 +80,24 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 
 /* HERO */
 .hero{position:relative;height:100vh;min-height:720px;overflow:hidden}
-.hero-topbar{position:absolute;top:0;left:0;right:0;z-index:20;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;padding:72px var(--px) 0;color:var(--ink-0);font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
-@media(max-width:768px){.hero-topbar{grid-template-columns:1fr 1fr;gap:8px;padding-top:72px;font-size:9px}.hero-topbar>div:nth-child(2),.hero-topbar>div:nth-child(3){display:none}}
+.hero-topbar{position:absolute;top:0;left:0;right:0;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;gap:0;padding:72px var(--px) 0;color:var(--ink-0);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.hero-topbar-nav{display:flex;gap:24px}
+.hero-topbar-nav a{color:var(--ink-2);transition:color .2s;text-decoration:none}
+.hero-topbar-nav a:hover{color:var(--accent)}
+.hero-topbar-lang{cursor:pointer;transition:color .2s}
+.hero-topbar-lang:hover{color:var(--accent)}
+@media(max-width:768px){.hero-topbar{grid-template-columns:1fr 1fr;gap:8px;padding-top:72px;font-size:9px}.hero-topbar>div:nth-child(2){display:none}}
 .hero-bg{position:absolute;inset:0}
-.hero-bg .img-placeholder{width:100%;height:100%}
 .hero-overlay{position:absolute;inset:0;background:radial-gradient(900px 700px at 50% 65%,rgba(61,43,108,.45) 0%,rgba(10,10,12,.9) 80%),linear-gradient(180deg,rgba(10,10,12,.55) 0%,rgba(10,10,12,.75) 100%)}
 .hero-title-block{position:absolute;left:0;right:0;top:50%;transform:translateY(-55%);z-index:4;padding:0 var(--px);text-align:center}
-.hero-title{font-family:var(--en);font-weight:700;font-size:clamp(72px,15vw,232px);letter-spacing:-.045em;line-height:.88;text-transform:uppercase}
+.hero-title{font-family:var(--en);font-weight:700;font-size:clamp(48px,15vw,232px);letter-spacing:-.045em;line-height:.88;text-transform:uppercase}
 .hero-title sup{font-size:clamp(20px,4vw,52px);vertical-align:super;margin-left:8px;font-weight:400}
-.hero-pill{display:inline-block;padding:8px 22px;border:1px solid rgba(232,228,220,.5);border-radius:999px;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-top:28px}
+.hero-pill{display:inline-block;padding:8px 22px;border:1px solid rgba(232,228,220,.5);border-radius:999px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-top:28px}
 .hero-services{position:absolute;top:120px;left:var(--px);z-index:5}
-.hero-services .metatag{color:var(--ink-2);margin-bottom:8px}
+.hero-services .metatag{margin-bottom:8px}
 .hero-services ul{font-family:var(--mono);font-size:12px;line-height:1.9}
 .hero-contact{position:absolute;top:120px;right:var(--px);z-index:5;text-align:right}
-.hero-contact .metatag{color:var(--ink-2);margin-bottom:8px}
+.hero-contact .metatag{margin-bottom:8px}
 .hero-contact div{font-family:var(--mono);font-size:12px}
 @media(max-width:768px){.hero-services,.hero-contact{display:none}}
 .hero-bottom{position:absolute;left:0;right:0;bottom:80px;z-index:4;text-align:center}
@@ -101,12 +118,11 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 .creed-sub{margin-top:48px;font-family:var(--ko);font-size:clamp(16px,2.5vw,22px);color:var(--ink-1);max-width:780px;margin-left:auto;margin-right:auto;line-height:1.75;word-break:keep-all}
 
 /* ORIGIN / ABOUT */
-.origin{padding:140px var(--px)}
-@media(max-width:768px){.origin{padding:80px var(--px)}}
+.origin{padding:140px var(--px) 60px}
+@media(max-width:768px){.origin{padding:80px var(--px) 40px}}
 .origin-grid{display:grid;grid-template-columns:280px 1fr;gap:64px;align-items:start;max-width:var(--max-w);margin:0 auto}
 @media(max-width:768px){.origin-grid{grid-template-columns:1fr;gap:40px}}
-.origin-sidebar .metatag{color:var(--ink-2);margin-bottom:16px}
-.origin-sidebar .chapter-list{font-family:var(--mono);font-size:12px;line-height:1.9;color:var(--ink-1)}
+.origin-sidebar .chapter-list{font-family:var(--mono);font-size:12px;line-height:1.9;color:var(--ink-2)}
 .origin-sidebar .extra{margin-top:40px;padding-top:24px;border-top:1px solid rgba(232,228,220,.18)}
 .origin-heading{font-family:var(--en);font-weight:700;font-size:clamp(64px,12vw,180px);letter-spacing:-.05em;line-height:.86;text-transform:uppercase}
 .origin-heading .italic-accent{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:300;color:var(--accent)}
@@ -122,45 +138,45 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 .stat-label{margin-top:10px}
 
 /* TIMELINE */
-.timeline-section{padding:120px var(--px);background:var(--bg-alt)}
-@media(max-width:768px){.timeline-section{padding:80px var(--px)}}
+.timeline-section{padding:60px var(--px) 120px;background:var(--bg-alt)}
+@media(max-width:768px){.timeline-section{padding:40px var(--px) 80px}}
 .timeline-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:60px;max-width:var(--max-w);margin-left:auto;margin-right:auto;flex-wrap:wrap;gap:24px}
 .timeline-title{font-family:var(--en);font-size:clamp(48px,8vw,96px);font-weight:700;letter-spacing:-.04em;line-height:.95;text-transform:uppercase}
-.timeline-subtitle{max-width:340px;font-family:var(--ko);font-size:15px;line-height:1.65;color:var(--ink-2)}
 .timeline-vertical{max-width:var(--max-w);margin:0 auto;display:flex;flex-direction:column}
-.tl-entry{display:grid;grid-template-columns:120px 1fr;gap:40px;padding:32px 0;border-top:1px solid var(--border);position:relative}
-@media(max-width:768px){.tl-entry{grid-template-columns:80px 1fr;gap:20px;padding:24px 0}}
-.tl-entry::before{content:'';position:absolute;top:0;left:60px;bottom:0;width:1px;background:var(--border)}
-@media(max-width:768px){.tl-entry::before{left:40px}}
-.tl-year{font-family:var(--en);font-size:clamp(28px,4vw,46px);font-weight:700;letter-spacing:-.03em;line-height:1}
-.tl-index{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.14em;margin-bottom:6px}
-.tl-title{font-family:var(--ko);font-size:14px;font-weight:600;margin-bottom:6px}
-.tl-desc{font-family:var(--ko);font-size:12px;line-height:1.6;color:var(--ink-2);max-width:560px;word-break:keep-all}
+.tl-entry{display:grid;grid-template-columns:180px 40px 1fr 1.6fr;gap:32px;padding:36px 0;border-top:1px solid rgba(232,228,220,.08);align-items:baseline}
+@media(max-width:768px){.tl-entry{grid-template-columns:80px 1fr;gap:20px;padding:24px 0}.tl-dot{display:none}.tl-desc{grid-column:span 1}}
+.tl-year{font-family:var(--en);font-size:48px;font-weight:300;letter-spacing:-.03em;line-height:1}
+.tl-dot{display:flex;justify-content:center;padding-top:8px}
+.tl-dot span{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px rgba(166,150,224,.6),0 0 0 4px rgba(166,150,224,.12)}
+.tl-title{font-family:var(--ko);font-size:20px;font-weight:400;margin-bottom:6px}
+.tl-title-en{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-2);text-transform:uppercase}
+.tl-desc{font-family:var(--ko);font-size:15px;line-height:1.7;color:var(--ink-1);word-break:keep-all;max-width:540px}
 
 /* ENGINES */
-.engines-section{padding:140px var(--px)}
+.engines-section{padding:140px var(--px);border-top:1px solid var(--border)}
 @media(max-width:768px){.engines-section{padding:80px var(--px)}}
 .engines-heading{font-family:var(--en);font-weight:700;font-size:clamp(56px,12vw,180px);letter-spacing:-.05em;line-height:.88;text-transform:uppercase;margin-bottom:60px}
 .engines-heading .italic-accent{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:300;color:var(--accent)}
-.engine-row{padding:40px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:120px 1fr 480px 280px;gap:40px;align-items:center}
+.engine-row{padding:40px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:120px 320px 1fr 280px;gap:40px;align-items:start}
 .engine-row:first-child{border-top:1px solid var(--border-strong)}
 .engine-row:last-child{border-bottom:1px solid var(--border-strong)}
 @media(max-width:1024px){.engine-row{grid-template-columns:1fr;gap:20px}}
 .engine-num{font-family:var(--en);font-size:clamp(48px,7vw,96px);font-weight:700;letter-spacing:-.04em;line-height:.9}
-.engine-name{font-family:var(--en);font-size:clamp(24px,4vw,48px);font-weight:700;letter-spacing:-.03em;text-transform:uppercase;line-height:1}
-.engine-sub{font-family:var(--ko);font-size:15px;color:var(--ink-2);margin-top:10px}
-.engine-tag{color:var(--accent);margin-top:14px}
+.engine-name{font-family:var(--en);font-size:clamp(24px,4vw,40px);font-weight:700;letter-spacing:-.03em;text-transform:uppercase;line-height:1}
+.engine-sub{font-family:var(--ko);font-size:14px;color:var(--ink-2);margin-top:8px}
+.engine-tag{color:var(--accent);margin-top:10px;white-space:nowrap}
+.engine-lede{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--accent);line-height:1.4;margin-bottom:12px}
 .engine-body{font-family:var(--ko);font-size:15px;line-height:1.7;color:var(--ink-1);word-break:keep-all}
 .engine-stats{display:flex;flex-direction:column;gap:8px}
 .engine-stat{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted rgba(232,228,220,.2);padding-bottom:6px;font-family:var(--mono)}
 .engine-stat .val{font-size:18px;color:var(--ink-0)}
-.engine-stat .lbl{font-size:11px;color:var(--ink-2);letter-spacing:.14em;text-transform:uppercase}
+.engine-stat .lbl{font-size:11px;color:var(--ink-2);letter-spacing:.08em;text-transform:uppercase}
 
 /* FLAGSHIP */
-.flagship-section{padding:140px var(--px);background:var(--bg-alt)}
+.flagship-section{padding:140px var(--px);background:var(--bg-alt);border-top:1px solid var(--border)}
 @media(max-width:768px){.flagship-section{padding:80px var(--px)}}
 .flagship-meta-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:36px;flex-wrap:wrap;gap:12px}
-.flagship-title{font-family:var(--en);font-size:clamp(72px,15vw,220px);font-weight:700;letter-spacing:-.055em;line-height:.86;text-transform:uppercase}
+.flagship-title{font-family:var(--en);font-size:clamp(48px,15vw,220px);font-weight:700;letter-spacing:-.055em;line-height:.86;text-transform:uppercase}
 .flagship-title .outline{-webkit-text-stroke:2px var(--ink-0);color:transparent}
 .flagship-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px}
 @media(max-width:768px){.flagship-grid{grid-template-columns:1fr;gap:40px}}
@@ -174,68 +190,16 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 .flagship-images{display:flex;flex-direction:column;gap:16px}
 .flagship-sub-images{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
-/* FOR ARTISTS */
-.for-artists{margin-top:80px;padding:80px var(--px);border-top:1px solid var(--border);border-bottom:1px solid var(--border);max-width:none;background:var(--bg-alt)}
-.for-artists-title{font-family:var(--en);font-weight:700;font-size:clamp(48px,7vw,96px);letter-spacing:-.04em;text-transform:uppercase;line-height:.95;margin-bottom:40px}
-.for-artists-body{font-family:var(--ko);font-size:17px;line-height:1.75;color:var(--ink-1);max-width:var(--body-max);margin-bottom:48px;word-break:keep-all}
-.for-artists-points{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border)}
-@media(max-width:768px){.for-artists-points{grid-template-columns:1fr}}
-.fa-point{background:var(--bg-alt);padding:28px 24px}
-.fa-point-title{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
-.fa-point-body{font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1);word-break:keep-all}
-
-/* ECOSYSTEM */
-.eco-section{padding:140px var(--px);border-top:1px solid var(--border)}
-@media(max-width:768px){.eco-section{padding:80px var(--px)}}
-.eco-heading{font-family:var(--en);font-weight:700;font-size:clamp(48px,10vw,140px);letter-spacing:-.05em;line-height:.88;text-transform:uppercase;margin-bottom:48px}
-.eco-heading .italic-accent{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:300;color:var(--accent)}
-.eco-intro{font-family:var(--ko);font-size:17px;line-height:1.75;color:var(--ink-1);max-width:var(--body-max);margin-bottom:56px;word-break:keep-all}
-.cycle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);margin-bottom:64px}
-@media(max-width:768px){.cycle-grid{grid-template-columns:1fr 1fr}}
-.cycle-step{padding:28px 20px;border-right:1px solid var(--border);position:relative}
-.cycle-step:last-child{border-right:none}
-@media(max-width:768px){.cycle-step{border-bottom:1px solid var(--border)}.cycle-step:nth-child(2){border-right:none}}
-.cycle-num{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.14em;margin-bottom:12px}
-.cycle-text{font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1);word-break:keep-all}
-.cycle-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:16px;z-index:2}
-@media(max-width:768px){.cycle-arrow{display:none}}
-.engine-table{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);margin-bottom:64px}
-@media(max-width:768px){.engine-table{grid-template-columns:1fr 1fr}}
-.engine-table-cell{padding:20px;border-right:1px solid var(--border)}
-.engine-table-cell:last-child{border-right:none}
-@media(max-width:768px){.engine-table-cell{border-bottom:1px solid var(--border)}.engine-table-cell:nth-child(2){border-right:none}}
-.engine-table-city{font-family:var(--en);font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
-.engine-table-role{font-family:var(--ko);font-size:13px;color:var(--ink-2)}
-
-/* WHY NOW */
-.why-now{margin-bottom:64px}
-.why-now-title{font-family:var(--en);font-weight:700;font-size:clamp(48px,7vw,96px);letter-spacing:-.04em;text-transform:uppercase;margin-bottom:32px}
-.wave-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
-@media(max-width:768px){.wave-cards{grid-template-columns:1fr}}
-.wave-card{padding:32px 24px;background:var(--bg)}
-.engine-lede{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--accent);line-height:1.4;margin-bottom:12px}
-.wave-card-metric{font-family:var(--en);font-size:42px;font-weight:700;color:var(--accent);letter-spacing:-0.03em;line-height:1;margin:12px 0 16px}
-.wave-card-num{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.14em;margin-bottom:8px}
-.wave-card-title{font-family:var(--ko);font-size:18px;font-weight:600;margin-bottom:12px}
-.wave-card-body{font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-2);word-break:keep-all}
-
-/* VISION */
-.vision{padding:48px 40px;border:1px solid var(--accent);background:var(--bg-alt)}
-.vision-title{font-family:var(--en);font-weight:700;font-size:clamp(24px,4vw,48px);letter-spacing:-.03em;text-transform:uppercase;margin-bottom:24px}
-.vision-sub{font-family:var(--ko);font-size:16px;color:var(--ink-1);margin-bottom:20px;word-break:keep-all}
-.vision-list{font-family:var(--ko);font-size:15px;line-height:2;color:var(--ink-1);word-break:keep-all}
-.vision-list li::before{content:'\2014\0020';color:var(--accent)}
-.vision-footer{font-family:var(--ko);font-size:15px;color:var(--ink-0);margin-top:24px;font-weight:500}
 
 /* CONTACT */
 .contact-section{padding:160px var(--px) 80px;text-align:center;border-top:1px solid var(--border)}
 @media(max-width:768px){.contact-section{padding:80px var(--px) 60px}}
-.contact-heading{font-family:var(--en);font-size:clamp(72px,18vw,260px);font-weight:700;letter-spacing:-.055em;line-height:.85;text-transform:uppercase}
+.contact-heading{font-family:var(--en);font-size:clamp(48px,18vw,260px);font-weight:700;letter-spacing:-.055em;line-height:.85;text-transform:uppercase}
 .contact-heading .italic-accent{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:300;color:var(--accent)}
 .contact-ctas{margin-top:56px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
-.cta-primary{padding:18px 36px;border:1px solid var(--ink-0);background:var(--ink-0);color:var(--bg);font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;display:inline-block;transition:all .2s}
+.cta-primary{padding:18px 36px;border:1px solid var(--ink-0);background:var(--ink-0);color:var(--bg);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;display:inline-block;transition:all .2s}
 .cta-primary:hover{background:var(--accent);border-color:var(--accent);color:var(--bg)}
-.cta-secondary{padding:18px 36px;border:1px solid rgba(232,228,220,.4);color:var(--ink-0);font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;display:inline-block;transition:all .2s}
+.cta-secondary{padding:18px 36px;border:1px solid rgba(232,228,220,.4);color:var(--ink-0);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;display:inline-block;transition:all .2s}
 .cta-secondary:hover{border-color:var(--accent);color:var(--accent)}
 .contact-grid{margin-top:60px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;max-width:1100px;margin-left:auto;margin-right:auto;text-align:left;border:1px solid var(--border)}
 @media(max-width:768px){.contact-grid{grid-template-columns:1fr}}
@@ -247,33 +211,67 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 /* FOOTER */
 .footer{padding:48px var(--px);border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:center}
 @media(max-width:768px){.footer{grid-template-columns:1fr;text-align:center;gap:20px}}
-.footer-logo{font-family:var(--en);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
-.footer-nav{display:flex;justify-content:center;gap:24px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.footer-logo{font-family:var(--en);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.footer-nav{display:flex;justify-content:center;gap:24px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
 .footer-nav a:hover{color:var(--accent)}
-.footer-right{text-align:right;font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.1em}
+.footer-right{text-align:right;font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.06em}
 @media(max-width:768px){.footer-right{text-align:center}}
-.footer-social{display:flex;justify-content:flex-end;gap:16px;margin-bottom:8px}
-@media(max-width:768px){.footer-social{justify-content:center}}
-.footer-social a{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);transition:color .2s}
-.footer-social a:hover{color:var(--accent)}
 
-/* IMAGE PLACEHOLDER */
-.img-placeholder{background:#151518;display:flex;align-items:center;justify-content:center;border:1px solid rgba(232,228,220,.1)}
-.img-placeholder span{font-family:monospace;font-size:11px;letter-spacing:2px;color:rgba(232,228,220,.3);text-transform:uppercase}
+/* Inline grid responsive overrides */
+.eco-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+@media(max-width:768px){.eco-grid{grid-template-columns:1fr;gap:40px}}
+.track-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:768px){.track-cards{grid-template-columns:1fr}}
+.flagship-detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:40px}
+@media(max-width:768px){.flagship-detail-grid{grid-template-columns:1fr}}
+
+/* ── Mobile responsive additions ── */
+
+/* ECO diagram wrapper */
+.eco-diagram-wrap{position:relative;width:100%;max-width:480px;margin:0 auto;padding:48px 40px}
+@media(max-width:768px){.eco-diagram-wrap{padding:40px 28px}}
+
+/* ECO diagram labels */
+.eco-label-top{position:absolute;top:0;left:50%;transform:translateX(-50%);text-align:center}
+.eco-label-right{position:absolute;top:50%;right:-32px;transform:translateY(-50%);text-align:center}
+.eco-label-bottom{position:absolute;bottom:0;left:50%;transform:translateX(-50%);text-align:center}
+.eco-label-left{position:absolute;top:50%;left:-32px;transform:translateY(-50%);text-align:center}
+@media(max-width:768px){
+  .eco-label-right{right:-44px}
+  .eco-label-left{left:-44px}
+  .eco-label-right .eco-label-name,
+  .eco-label-left .eco-label-name{font-size:12px}
+}
+
+/* ECO right panel: 자금/운영/기획 */
+.eco-reasons{display:flex;flex-direction:column;gap:18px}
+
+/* Business Tracks section */
+.business-tracks-section{padding:100px var(--px);background:var(--bg-alt);border-top:1px solid var(--border)}
+@media(max-width:768px){.business-tracks-section{padding:60px var(--px)}}
+
+/* Vision section */
+.vision-section{padding:160px var(--px);border-top:1px solid var(--border);text-align:center}
+@media(max-width:768px){.vision-section{padding:80px var(--px)}}
+
+/* Flagship main image */
+.flagship-main-img{width:100%;height:460px;position:relative;overflow:hidden}
+@media(max-width:768px){.flagship-main-img{height:260px}}
+
+/* Contact modal */
+.contact-modal-inner{background:var(--bg);border:1px solid var(--border);max-width:480px;width:90%;padding:40px;position:relative}
+@media(max-width:768px){.contact-modal-inner{padding:24px 20px;width:94%}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="nav">
+<!-- SCROLL NAV — hidden, appears on scroll -->
+<nav class="nav" id="scrollNav">
   <a href="#hero" class="nav-logo" onclick="event.preventDefault();window.scrollTo({top:0,behavior:'smooth'})"><img src="img/logo-white.png" alt="Birch Sound"></a>
   <div class="nav-links" id="navLinks">
-    <a href="#creed">Creed</a>
     <a href="#about">About</a>
-    <a href="#timeline">Timeline</a>
     <a href="#business">Business</a>
     <a href="#flagship">Flagship</a>
-    <a href="#ecosystem">Ecosystem</a>
     <a href="#contact">Contact</a>
   </div>
   <div class="nav-right">
@@ -285,34 +283,32 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 </nav>
 
 <!-- HERO -->
-<section class="hero" id="hero">
+<section class="hero noise" id="hero">
   <div class="hero-bg">
     <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1800&q=80&auto=format&fit=crop" alt="Live concert crowd" style="width:100%;height:100%;object-fit:cover">
   </div>
   <div class="hero-overlay"></div>
 
-  <!-- Gate silhouette SVG -->
-  <svg style="position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:900px;height:780px;z-index:1;opacity:0.5" viewBox="0 0 900 780">
-    <circle cx="450" cy="460" r="260" fill="#3d2b6c" opacity="0.55"/>
-    <circle cx="450" cy="460" r="200" fill="none" stroke="#a696e0" stroke-opacity="0.45" stroke-width="1"/>
-    <rect x="350" y="200" width="200" height="580" fill="#0a0a0c"/>
-    <rect x="340" y="240" width="220" height="4" fill="#a696e0" opacity=".6"/>
-  </svg>
-
+  <!-- TOPBAR: logo / nav links / lang toggle -->
   <div class="hero-topbar">
     <div>[ BY ] BIRCH SOUND &copy;</div>
-    <div style="text-align:center">[ SINGAPORE &middot; SEOUL &middot; HONG KONG ]</div>
-    <div style="text-align:center">[ 2015 &mdash; 2026 ]</div>
-    <div style="text-align:right">[ SCROLL &darr; ]</div>
+    <div style="text-align:center" class="hero-topbar-nav">
+      <a href="#about">ABOUT</a>
+      <a href="#business">BUSINESS</a>
+      <a href="#flagship">FLAGSHIP</a>
+      <a href="#contact">CONTACT</a>
+    </div>
+    <div style="text-align:right"><span class="hero-topbar-lang" id="heroLangToggle">[ KO / EN ]</span></div>
   </div>
 
+  <!-- SERVICES — with anchor links -->
   <div class="hero-services">
     <div class="metatag">[ SERVICES ]</div>
     <ul>
-      <li>[ 01 ] Content</li>
-      <li>[ 02 ] EnterTech</li>
-      <li>[ 03 ] Basis</li>
-      <li>[ 04 ] Live IP</li>
+      <li><a href="#engine-content" style="color:var(--ink-0);text-decoration:none">[ 01 ] Content</a></li>
+      <li><a href="#engine-entertech" style="color:var(--ink-0);text-decoration:none">[ 02 ] Technology</a></li>
+      <li><a href="#engine-basis" style="color:var(--ink-0);text-decoration:none">[ 03 ] Fund</a></li>
+      <li><a href="#engine-live" style="color:var(--ink-0);text-decoration:none">[ 04 ] Live IP</a></li>
     </ul>
   </div>
 
@@ -328,8 +324,8 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
   </div>
 
   <div class="hero-bottom">
-    <div class="hero-tagline">From content to capital. From screen to stage. From IP to asset.</div>
-    <div class="metatag" style="color:var(--ink-2)">[ Homepage &middot; Concept Preview &middot; v6 &mdash; 2025 ]</div>
+    <div class="hero-tagline">From Content to Capital. From Screen to Stage. From IP to Asset.</div>
+    <div class="metatag">[ Singapore &middot; Seoul &middot; Hong Kong &middot; est. 2015 ]</div>
   </div>
 
   <div class="corner corner--tl"></div>
@@ -340,7 +336,7 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 
 <!-- CREED -->
 <section class="creed fade-up" id="creed">
-  <div class="metatag" style="color:var(--ink-2);margin-bottom:28px">[ 001 &middot; CREED ]</div>
+  <div class="metatag" style="margin-bottom:28px">[ CREED ]</div>
   <div class="creed-heading">
     WE DON'T<br>
     <span class="outline">FOLLOW</span> LINES.<br>
@@ -358,22 +354,15 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 <section class="origin fade-up" id="about">
   <div class="origin-grid">
     <div class="origin-sidebar">
-      <div class="metatag">[ ABOUT &middot; 002 ]</div>
-      <div class="chapter-list">
-        <div>[ 01 ] Content Foundation</div>
-        <div>[ 02 ] EnterTech Platform</div>
-        <div>[ 03 ] Basis Capital</div>
-        <div>[ 04 ] Flagship IP</div>
+      <div class="metatag">[ 001 &middot; ABOUT US ]</div>
+      <div class="chapter-list" style="margin-top:16px">
+        <div>[ 01 ] Content</div>
+        <div>[ 02 ] Technology</div>
+        <div>[ 03 ] Fund</div>
+        <div>[ 04 ] Live IP</div>
       </div>
-      <div class="extra">
-        <div class="metatag" style="color:var(--ink-2);margin-bottom:12px">Est. 2015 &middot; Seoul</div>
-        <div class="i18n" style="font-family:var(--ko);font-size:13px;line-height:1.9;color:var(--ink-2);letter-spacing:.02em"
-          data-ko="지상파 · 케이블 · OTT"
-          data-en="Terrestrial · Cable · OTT">지상파 &middot; 케이블 &middot; OTT</div>
-        <div style="font-family:var(--mono);font-size:11px;line-height:1.9;color:var(--ink-2);margin-top:6px">
-          <div>500+ episodes produced</div>
-          <div>10 years of content</div>
-        </div>
+      <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(232,228,220,.18)">
+        <span class="metatag" style="color:var(--ink-2);cursor:default">EXECUTIVE TEAM &mdash; COMING SOON</span>
       </div>
     </div>
 
@@ -381,127 +370,104 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
       <h2 class="origin-heading">WHERE<br>IT <span class="italic-accent">started.</span></h2>
       <div class="origin-body">
         <p class="i18n"
-          data-ko="2015년, 한국 방송 제작 현장에서 출발. 지상파·케이블·OTT — 수백 편의 콘텐츠를 기획하고 제작했습니다."
-          data-en="Founded in 2015 in Korean broadcast production. Terrestrial, cable, OTT — hundreds of productions planned and delivered.">2015년, 한국 방송 제작 현장에서 출발. 지상파·케이블·OTT — 수백 편의 콘텐츠를 기획하고 제작했습니다.</p>
-        <p class="i18n"
           data-ko="콘텐츠를 만드는 것은 알고 있었습니다. 그러나 만드는 것만으로는 부족하다는 것도 알게 되었습니다."
           data-en="We knew how to create content. But we learned that creation alone was not enough.">콘텐츠를 만드는 것은 알고 있었습니다. 그러나 만드는 것만으로는 부족하다는 것도 알게 되었습니다.</p>
-      </div>
-      <div style="margin-top:32px;max-width:var(--body-max)">
-        <p class="i18n-html" style="font-family:var(--ko);font-size:18px;line-height:1.6;color:var(--ink-0);font-weight:400"
-          data-ko="콘텐츠는 플랫폼이 되어야 하고,<br>플랫폼은 경험이 되어야 하며,<br>경험은 자산이 되어야 합니다."
-          data-en="Content must become a platform.<br>Platform must become experience.<br>Experience must become asset.">콘텐츠는 플랫폼이 되어야 하고,<br>플랫폼은 경험이 되어야 하며,<br>경험은 자산이 되어야 합니다.</p>
-        <p style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--accent);margin-top:32px;line-height:1.4">From Content to Capital.<br>From Screen to Stage.<br>From IP to Asset.</p>
       </div>
 
       <div class="stats-bar">
         <div class="stat-cell">
           <div class="stat-val" data-count="500" data-suffix="+">0</div>
-          <div class="metatag stat-label" style="color:var(--ink-2)">Episodes produced</div>
+          <div class="metatag stat-label">Episodes produced</div>
         </div>
         <div class="stat-cell">
           <div class="stat-val" data-count="10">0</div>
-          <div class="metatag stat-label" style="color:var(--ink-2)">Years of content</div>
+          <div class="metatag stat-label">Years of content</div>
         </div>
         <div class="stat-cell">
           <div class="stat-val" data-count="6">0</div>
-          <div class="metatag stat-label" style="color:var(--ink-2)">Countries distributed</div>
+          <div class="metatag stat-label">Countries distributed</div>
         </div>
         <div class="stat-cell">
           <div class="stat-val" data-count="4">0</div>
-          <div class="metatag stat-label" style="color:var(--ink-2)">Engines today</div>
+          <div class="metatag stat-label">Engines today</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TIMELINE (VERTICAL) -->
+<!-- TIMELINE -->
 <section class="timeline-section fade-up" id="timeline">
   <div class="timeline-header">
     <div>
-      <div class="metatag" style="color:var(--ink-2);margin-bottom:14px">[ 003 &middot; TIMELINE ]</div>
+      <div class="metatag" style="margin-bottom:14px">[ 002 &middot; TIMELINE ]</div>
       <h2 class="timeline-title">SIGNAL LOG<br>2015 / 2026</h2>
     </div>
   </div>
 
   <div class="timeline-vertical">
     <div class="tl-entry fade-up">
-      <div><div class="tl-index">[ 01 ]</div><div class="tl-year">2015</div></div>
+      <div class="tl-year">2015</div>
+      <div class="tl-dot"><span></span></div>
       <div>
-        <div class="tl-title i18n"
-          data-ko="AKATV 설립 — 콘텐츠 제작사"
-          data-en="AKATV Founded — Content Production">AKATV 설립 &mdash; 콘텐츠 제작사</div>
-        <div class="tl-desc i18n"
-          data-ko="한국 방송 제작 현장에서 출발. 프로듀스 101 시즌2·48, 쇼미더머니, MBC·JTBC·M.net 히트 프로그램 외주 제작."
-          data-en="Launched from Korean broadcast. Produce 101 S2·48, Show Me the Money, MBC·JTBC·M.net hit programs.">한국 방송 제작 현장에서 출발. 프로듀스 101 시즌2&middot;48, 쇼미더머니, MBC&middot;JTBC&middot;M.net 히트 프로그램 외주 제작.</div>
+        <div class="tl-title i18n" data-ko="AKATV 설립" data-en="AKATV Founded">AKATV 설립</div>
+        <div class="tl-title-en">Content Production</div>
       </div>
+      <div class="tl-desc i18n" data-ko="한국 방송 제작 현장에서 출발 — 지상파 · 케이블 · OTT." data-en="Launched from Korean broadcast — terrestrial · cable · OTT.">한국 방송 제작 현장에서 출발 &mdash; 지상파 &middot; 케이블 &middot; OTT.</div>
     </div>
     <div class="tl-entry fade-up">
-      <div><div class="tl-index">[ 02 ]</div><div class="tl-year">2016</div></div>
+      <div class="tl-year">2016</div>
+      <div class="tl-dot"><span></span></div>
       <div>
-        <div class="tl-title i18n"
-          data-ko="디지털 플랫폼 확장 : 음악과 그 스토리를 만들다"
-          data-en="Digital Platform Expansion">디지털 플랫폼 확장 : 음악과 그 스토리를 만들다</div>
-        <div class="tl-desc i18n"
-          data-ko="YouTube·Naver TV·Amazon Prime·iQIYI 등 국내외 멀티플랫폼 유통 인프라 구축. 네이버TV 웹예능 유통지원작 2016–2017 연속 선정."
-          data-en="YouTube·Naver TV·Amazon Prime·iQIYI multi-platform distribution. Naver TV web-variety distribution 2016–2017.">YouTube&middot;Naver TV&middot;Amazon Prime&middot;iQIYI 등 국내외 멀티플랫폼 유통 인프라 구축. 네이버TV 웹예능 유통지원작 2016&ndash;2017 연속 선정.</div>
+        <div class="tl-title i18n" data-ko="디지털 플랫폼 확장" data-en="Digital Platform Expansion">디지털 플랫폼 확장</div>
+        <div class="tl-title-en">Multi-Platform Distribution</div>
       </div>
+      <div class="tl-desc i18n" data-ko="YouTube · Naver TV · Amazon Prime · iQIYI 글로벌 유통 인프라 구축." data-en="YouTube · Naver TV · Amazon Prime · iQIYI global distribution.">YouTube &middot; Naver TV &middot; Amazon Prime &middot; iQIYI 글로벌 유통 인프라 구축.</div>
     </div>
     <div class="tl-entry fade-up">
-      <div><div class="tl-index">[ 03 ]</div><div class="tl-year">2018</div></div>
+      <div class="tl-year">2018</div>
+      <div class="tl-dot"><span></span></div>
       <div>
-        <div class="tl-title i18n"
-          data-ko="팟캐스트 디지털 유통과 광고 사업 진출"
-          data-en="Podcast & Audio Ad Tech">팟캐스트 디지털 유통과 광고 사업 진출</div>
-        <div class="tl-desc i18n"
-          data-ko="팟캐스트를 단순 콘텐츠 포맷이 아닌 데이터 인텔리전스 플랫폼으로 접근. 오디오 광고 테크 및 청취자 행동 분석 시스템을 한국시장에 확산."
-          data-en="Podcast as data intelligence platform. Audio ad tech and listener behavior analytics across Korea.">팟캐스트를 단순 콘텐츠 포맷이 아닌 데이터 인텔리전스 플랫폼으로 접근. 오디오 광고 테크 및 청취자 행동 분석 시스템을 한국시장에 확산.</div>
+        <div class="tl-title i18n" data-ko="오디오 & 애드테크" data-en="Audio Intelligence">오디오 &amp; 애드테크</div>
+        <div class="tl-title-en">Audio Intelligence</div>
       </div>
+      <div class="tl-desc i18n" data-ko="팟캐스트를 데이터 인텔리전스 플랫폼으로. 오디오 광고 테크 확산." data-en="Podcast as data intelligence platform. Audio ad tech expansion.">팟캐스트를 데이터 인텔리전스 플랫폼으로. 오디오 광고 테크 확산.</div>
     </div>
     <div class="tl-entry fade-up">
-      <div><div class="tl-index">[ 04 ]</div><div class="tl-year">2023</div></div>
+      <div class="tl-year">2023</div>
+      <div class="tl-dot"><span></span></div>
       <div>
-        <div class="tl-title i18n"
-          data-ko="AI 버추얼 & 실감형 콘텐츠 기술 사업 진출"
-          data-en="AI Virtual & Immersive Tech">AI 버추얼 &amp; 실감형 콘텐츠 기술 사업 진출</div>
-        <div class="tl-desc i18n"
-          data-ko="AI 이미지 생성, LiDAR 센서 기반 인터랙티브 기술, Virtual-Scalable City 등 AI 기반 공간 스토리텔링 기술 개발."
-          data-en="AI image generation, LiDAR interactive tech, Virtual-Scalable City — spatial storytelling.">AI 이미지 생성, LiDAR 센서 기반 인터랙티브 기술, Virtual-Scalable City 등 AI 기반 공간 스토리텔링 기술 개발.</div>
+        <div class="tl-title i18n" data-ko="AI 버추얼 기술" data-en="AI Virtual Tech">AI 버추얼 기술</div>
+        <div class="tl-title-en">Spatial Storytelling</div>
       </div>
+      <div class="tl-desc i18n" data-ko="AI 생성 · LiDAR 인터랙티브 · Virtual-Scalable City 개발." data-en="AI generation · LiDAR interactive · Virtual-Scalable City.">AI 생성 &middot; LiDAR 인터랙티브 &middot; Virtual-Scalable City 개발.</div>
     </div>
     <div class="tl-entry fade-up">
-      <div><div class="tl-index">[ 05 ]</div><div class="tl-year">2024</div></div>
+      <div class="tl-year">2024</div>
+      <div class="tl-dot"><span></span></div>
       <div>
-        <div class="tl-title i18n"
-          data-ko="Birch Sound로 사명 변경"
-          data-en="Rebranded to Birch Sound">Birch Sound로 사명 변경</div>
-        <div class="tl-desc i18n"
-          data-ko="AKATV에서 Birch Sound로 브랜드 진화. 콘텐츠·오디오·AI 버추얼 기술을 통합하고 새로운 엔터테인먼트 사업의 문을 열다."
-          data-en="From AKATV to Birch Sound. Content·audio·AI virtual tech unified under new identity.">AKATV에서 Birch Sound로 브랜드 진화. 콘텐츠&middot;오디오&middot;AI 버추얼 기술을 통합하고 새로운 엔터테인먼트 사업의 문을 열다.</div>
+        <div class="tl-title i18n" data-ko="Birch Sound 브랜드 진화" data-en="Brand Evolution">Birch Sound 브랜드 진화</div>
+        <div class="tl-title-en">Brand Evolution</div>
       </div>
+      <div class="tl-desc i18n" data-ko="AKATV → Birch Sound. 콘텐츠·오디오·AI 버추얼 통합." data-en="AKATV → Birch Sound. Content·audio·AI virtual unified.">AKATV &rarr; Birch Sound. 콘텐츠&middot;오디오&middot;AI 버추얼 통합.</div>
     </div>
     <div class="tl-entry fade-up">
-      <div><div class="tl-index">[ 06 ]</div><div class="tl-year">2025</div></div>
+      <div class="tl-year">2025</div>
+      <div class="tl-dot"><span></span></div>
       <div>
-        <div class="tl-title i18n"
-          data-ko="Basis Asset Management와 홍콩/싱가포르 허브 구축"
-          data-en="Basis Asset Management & Global Hubs">Basis Asset Management와 홍콩/싱가포르 허브 구축</div>
-        <div class="tl-desc i18n"
-          data-ko="엔터테인먼트 전문 투자 플랫폼 론칭. 콘텐츠 IP 펀드, 라이브 엔터테인먼트 펀드, RWA 기반 IP 자산화 펀드 운용 시작."
-          data-en="Entertainment investment platform launched. Content IP, Live, RWA funds. Hong Kong & Singapore hubs.">엔터테인먼트 전문 투자 플랫폼 론칭. 콘텐츠 IP 펀드, 라이브 엔터테인먼트 펀드, RWA 기반 IP 자산화 펀드 운용 시작.</div>
+        <div class="tl-title i18n" data-ko="Basis 출범" data-en="Capital Layer">Basis 출범</div>
+        <div class="tl-title-en">Capital Layer</div>
       </div>
+      <div class="tl-desc i18n" data-ko="홍콩 · 싱가포르 허브. 엔터테인먼트 전문 투자 플랫폼 론칭." data-en="Hong Kong · Singapore hubs. Entertainment investment platform launched.">홍콩 &middot; 싱가포르 허브. 엔터테인먼트 전문 투자 플랫폼 론칭.</div>
     </div>
     <div class="tl-entry fade-up">
-      <div><div class="tl-index">[ 07 ]</div><div class="tl-year">2026</div></div>
+      <div class="tl-year">2026</div>
+      <div class="tl-dot"><span></span></div>
       <div>
-        <div class="tl-title i18n"
-          data-ko="Live Entertainment 사업 개시"
-          data-en="Live Entertainment Launch">Live Entertainment 사업 개시</div>
-        <div class="tl-desc i18n"
-          data-ko="아시아-태평양 순회 멀티시티 라이브 엔터테인먼트 IP로 플래그십 프로젝트 출범. 10년 생태계 구축의 통합 포인트."
-          data-en="APAC multi-city live entertainment IP flagship. The integration point of a decade-long ecosystem.">아시아-태평양 순회 멀티시티 라이브 엔터테인먼트 IP로 플래그십 프로젝트 출범. 10년 생태계 구축의 통합 포인트.</div>
+        <div class="tl-title i18n" data-ko="Flagship 개시" data-en="Live Entertainment">Flagship 개시</div>
+        <div class="tl-title-en">Live Entertainment</div>
       </div>
+      <div class="tl-desc i18n" data-ko="APAC 멀티시티 라이브 IP. 10년 생태계의 통합 포인트." data-en="APAC multi-city live IP. The integration point of a decade-long ecosystem.">APAC 멀티시티 라이브 IP. 10년 생태계의 통합 포인트.</div>
     </div>
   </div>
 </section>
@@ -509,100 +475,243 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 <!-- FOUR ENGINES -->
 <section class="engines-section fade-up" id="business">
   <div class="content-max">
-    <div class="metatag" style="color:var(--ink-2);margin-bottom:14px">[ 004 &middot; BUSINESS ]</div>
+    <div class="metatag" style="margin-bottom:14px">[ 003 &middot; BUSINESS ]</div>
     <h2 class="engines-heading">FOUR<br>ENGINES.<br><span class="italic-accent">one ecosystem.</span></h2>
 
-    <!-- Engine 01 -->
-    <div class="engine-row">
+    <!-- Engine 01: Content -->
+    <div class="engine-row" id="engine-content">
       <div class="engine-num">01</div>
       <div>
-        <div class="engine-name">Content Foundation</div>
-        <div class="engine-sub">AKATV &middot; Seoul</div>
-        <div class="metatag engine-tag">[ CONTENT &middot; PRODUCTION ]</div>
+        <div class="engine-name">Content</div>
+        <div class="engine-sub">Birch Sound Seoul</div>
+        <div class="metatag engine-tag" style="color:var(--accent)">[ CONTENT PRODUCTION &amp; DISTRIBUTION ]</div>
       </div>
       <div>
-        <div class="engine-lede i18n"
-          data-ko="모든 것은 좋은 콘텐츠에서 시작합니다."
-          data-en="Everything begins with great content.">모든 것은 좋은 콘텐츠에서 시작합니다.</div>
         <div class="engine-body i18n"
-          data-ko="지상파·종편·케이블 외주 제작, 웹 오리지널 IP 개발, 국내외 멀티플랫폼 유통 — 10년간 쌓아온 제작 역량이 우리 모든 사업의 기반입니다."
-          data-en="Terrestrial·cable outsourced production, web original IP development, global multi-platform distribution — a decade of production capability as the foundation of everything we do.">지상파·종편·케이블 외주 제작, 웹 오리지널 IP 개발, 국내외 멀티플랫폼 유통 — 10년간 쌓아온 제작 역량이 우리 모든 사업의 기반입니다.</div>
+          data-ko="방송 외주 제작으로 시작한 10년의 레거시. 지상파·케이블·OTT를 거쳐 글로벌 멀티플랫폼 유통까지."
+          data-en="A decade-long legacy starting from broadcast production. Terrestrial, cable, OTT to global multi-platform distribution.">방송 외주 제작으로 시작한 10년의 레거시. 지상파·케이블·OTT를 거쳐 글로벌 멀티플랫폼 유통까지.</div>
+        <div style="margin-top:20px;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--accent);line-height:1.4">A decade of stories. Now, the platform for all of them.</div>
       </div>
       <div class="engine-stats">
-        <div class="engine-stat"><span class="val">500+</span><span class="lbl">Episodes</span></div>
-        <div class="engine-stat"><span class="val">6</span><span class="lbl">Countries</span></div>
-        <div class="engine-stat"><span class="val">10yr</span><span class="lbl">Legacy</span></div>
+        <div class="engine-stat"><span class="val">10+</span><span class="lbl">years</span></div>
+        <div class="engine-stat"><span class="val">6</span><span class="lbl">countries</span></div>
+        <div class="engine-stat"><span class="val">&mdash;</span><span class="lbl">IP catalog</span></div>
       </div>
     </div>
 
-    <!-- Engine 02 -->
-    <div class="engine-row">
+    <!-- Engine 02: EnterTech -->
+    <div class="engine-row" id="engine-entertech">
       <div class="engine-num">02</div>
       <div>
-        <div class="engine-name">EnterTech</div>
-        <div class="engine-sub i18n"
-          data-ko="오디오 & AI 버추얼 · Hong Kong"
-          data-en="Audio & AI Virtual · Hong Kong">오디오 &amp; AI 버추얼 &middot; Hong Kong</div>
-        <div class="metatag engine-tag">[ AUDIO &middot; AI VIRTUAL ]</div>
+        <div class="engine-name">Technology</div>
+        <div class="engine-sub">Birch Sound Hong Kong</div>
+        <div class="metatag engine-tag" style="color:var(--accent)">[ AUDIO &middot; AI VIRTUAL &middot; DATA ]</div>
       </div>
       <div>
-        <div class="engine-lede i18n"
-          data-ko="스크린 너머에, AI가 만든 세계가 있습니다."
-          data-en="Beyond the screen, a world built by AI.">스크린 너머에, AI가 만든 세계가 있습니다.</div>
         <div class="engine-body i18n"
-          data-ko="팟캐스트와 오디오 광고를 데이터 인텔리전스로 전환하는 오디오 기술 레이어, 그리고 AI 기반 생성형 이미지·인터랙티브 공간·버추얼 도시를 구현하는 AI 버추얼 기술 레이어."
-          data-en="Audio tech layer converting podcasts and audio ads into data intelligence. AI virtual tech layer building generative imagery, interactive spaces, and virtual cities.">팟캐스트와 오디오 광고를 데이터 인텔리전스로 전환하는 오디오 기술 레이어, 그리고 AI 기반 생성형 이미지·인터랙티브 공간·버추얼 도시를 구현하는 AI 버추얼 기술 레이어.</div>
+          data-ko="오디오 인텔리전스와 AI 버추얼 — 공연을 살아있는 세계로 만드는 두 개의 기술 축."
+          data-en="Audio intelligence and AI virtual — two technology axes that turn performance into a living world.">오디오 인텔리전스와 AI 버추얼 &mdash; 공연을 살아있는 세계로 만드는 두 개의 기술 축.</div>
+        <div style="margin-top:20px;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--accent);line-height:1.4">We don't just broadcast audio. We make it intelligent.</div>
       </div>
       <div class="engine-stats">
-        <div class="engine-stat"><span class="val">12</span><span class="lbl">Broadcast Partners</span></div>
-        <div class="engine-stat"><span class="val">AI</span><span class="lbl">Sync Engine</span></div>
-        <div class="engine-stat"><span class="val">LiDAR</span><span class="lbl">Interactive</span></div>
+        <div class="engine-stat"><span class="val">2</span><span class="lbl">layers</span></div>
+        <div class="engine-stat"><span class="val">100+</span><span class="lbl">VFX titles</span></div>
+        <div class="engine-stat"><span class="val">Live</span><span class="lbl">AI sync</span></div>
       </div>
     </div>
 
-    <!-- Engine 03 -->
-    <div class="engine-row">
+    <!-- Engine 03: Basis -->
+    <div class="engine-row" id="engine-basis">
       <div class="engine-num">03</div>
       <div>
-        <div class="engine-name">Basis Asset</div>
-        <div class="engine-sub">Capital &middot; Singapore</div>
-        <div class="metatag engine-tag">[ CAPITAL &middot; INVESTMENT ]</div>
+        <div class="engine-name">Fund</div>
+        <div class="engine-sub">Birch Sound Singapore</div>
+        <div class="metatag engine-tag" style="color:var(--accent)">[ CAPITAL &amp; IP INVESTMENT ]</div>
       </div>
       <div>
-        <div class="engine-lede i18n"
-          data-ko="엔터테인먼트는 감성의 산업이지만, 숫자의 산업이기도 합니다."
-          data-en="Entertainment is an industry of emotion — and numbers.">엔터테인먼트는 감성의 산업이지만, 숫자의 산업이기도 합니다.</div>
         <div class="engine-body i18n"
-          data-ko="Birch Sound 생태계 위에서 작동하는 엔터테인먼트 전문 투자 플랫폼. 생태계 안에서 운영하는 사람들이 만든 투자 구조."
-          data-en="Entertainment-focused investment platform operating on the Birch Sound ecosystem. Built by operators inside the ecosystem, not outsiders looking in.">Birch Sound 생태계 위에서 작동하는 엔터테인먼트 전문 투자 플랫폼. 생태계 안에서 운영하는 사람들이 만든 투자 구조.</div>
+          data-ko="생태계 안에서 운용하는 엔터테인먼트 전문 투자 플랫폼. IP · 라이브 · RWA 구조화까지."
+          data-en="Entertainment investment platform operating inside the ecosystem. IP, live, and RWA structuring.">생태계 안에서 운용하는 엔터테인먼트 전문 투자 플랫폼. IP &middot; 라이브 &middot; RWA 구조화까지.</div>
+        <div style="margin-top:20px;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--accent);line-height:1.4">Smart money flows where the operators are.</div>
       </div>
       <div class="engine-stats">
-        <div class="engine-stat"><span class="val">4</span><span class="lbl">Fund Types</span></div>
-        <div class="engine-stat"><span class="val">RWA</span><span class="lbl">IP Asset</span></div>
-        <div class="engine-stat"><a href="https://www.basisamhk.com/" target="_blank" rel="noopener" style="font-size:11px;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">VISIT SITE &rarr;</a></div>
+        <div class="engine-stat"><span class="val" style="font-size:14px">Content IP</span><span class="lbl">Fund</span></div>
+        <div class="engine-stat"><span class="val" style="font-size:14px">Live</span><span class="lbl">Fund</span></div>
+        <div class="engine-stat"><span class="val" style="font-size:14px">EnterTech</span><span class="lbl">Fund</span></div>
+        <div class="engine-stat"><span class="val" style="font-size:14px">RWA IP</span><span class="lbl">Fund</span></div>
+        <a href="https://www.basisamhk.com/" target="_blank" rel="noopener" style="display:block;margin-top:16px;padding:12px 20px;border:1px solid var(--accent);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;transition:all .2s"
+          onmouseover="this.style.background='var(--accent)';this.style.color='var(--bg)'"
+          onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">VISIT BASIS SITE &rarr;</a>
       </div>
     </div>
 
-    <!-- Engine 04 -->
-    <div class="engine-row">
+    <!-- Engine 04: Live -->
+    <div class="engine-row" id="engine-live">
       <div class="engine-num">04</div>
       <div>
-        <div class="engine-name">Flagship Live</div>
-        <div class="engine-sub">Multi-City Festival &middot; APAC</div>
-        <div class="metatag engine-tag">[ LIVE &middot; FESTIVAL ]</div>
+        <div class="engine-name">Live IP</div>
+        <div class="engine-sub">Seoul &middot; Hong Kong &middot; Singapore</div>
+        <div class="metatag engine-tag" style="color:var(--accent)">[ FESTIVAL &amp; EXHIBITION ]</div>
       </div>
       <div>
-        <div class="engine-lede i18n"
-          data-ko="모든 것이 이 순간을 위해 존재합니다."
-          data-en="Everything exists for this moment.">모든 것이 이 순간을 위해 존재합니다.</div>
         <div class="engine-body i18n"
-          data-ko="아시아-태평양을 순회하는 멀티시티 음악 페스티벌 플랫폼입니다. 브랜드 전체 공개는 2026년 7월로 예정되어 있으며, 현재는 콘셉트 프리뷰 단계입니다."
-          data-en="Multi-city music festival platform touring Asia-Pacific. Full brand launch July 2026. Currently in concept preview.">아시아-태평양을 순회하는 멀티시티 음악 페스티벌 플랫폼입니다. 브랜드 전체 공개는 2026년 7월로 예정되어 있으며, 현재는 콘셉트 프리뷰 단계입니다.</div>
+          data-ko="APAC 멀티시티 순회 플래그십. Global × K-Pop × Local Act — 현재 콘셉트 프리뷰 단계."
+          data-en="APAC multi-city touring flagship. Global × K-Pop × Local Act — currently in concept preview.">APAC 멀티시티 순회 플래그십. Global &times; K-Pop &times; Local Act &mdash; 현재 콘셉트 프리뷰 단계.</div>
+        <div style="margin-top:20px;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--accent);line-height:1.4">The stage you can't explain without being there.</div>
       </div>
       <div class="engine-stats">
-        <div class="engine-stat"><span class="val">APAC</span><span class="lbl">Multi-City</span></div>
-        <div class="engine-stat"><span class="val">2026</span><span class="lbl">Brand Launch</span></div>
-        <div class="engine-stat"><span class="val">2027</span><span class="lbl">SGP Flagship</span></div>
+        <div class="engine-stat"><span class="val">Jul 26</span><span class="lbl">launch</span></div>
+        <div class="engine-stat"><span class="val">May 27</span><span class="lbl">SGP</span></div>
+        <div class="engine-stat"><span class="val">APAC</span><span class="lbl">tour</span></div>
+      </div>
+    </div>
+
+    <!-- Ecosystem cycle — circular diagram -->
+    <div style="margin-top:80px;padding-top:60px;border-top:1px solid var(--border)">
+      <div class="eco-grid">
+        <!-- SVG Diagram -->
+        <div class="eco-diagram-wrap">
+          <svg viewBox="0 0 480 480" style="width:100%;height:auto">
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <style>
+              @keyframes eco-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+              @keyframes eco-spin-r{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+              @keyframes eco-pulse{0%,100%{opacity:.3;r:15}50%{opacity:.6;r:18}}
+              @keyframes eco-glow{0%,100%{opacity:.6}50%{opacity:1}}
+              .eco-ring-dash{animation:eco-spin 60s linear infinite;transform-origin:240px 240px}
+              .eco-ring-outer{animation:eco-spin-r 90s linear infinite;transform-origin:240px 240px}
+              .eco-node-glow{animation:eco-pulse 3s ease-in-out infinite}
+              .eco-node-core{animation:eco-glow 3s ease-in-out infinite;filter:url(#glow)}
+              .eco-arrows{animation:eco-spin 60s linear infinite;transform-origin:240px 240px}
+            </style>
+            <!-- outer ring — slow reverse -->
+            <circle class="eco-ring-outer" cx="240" cy="240" r="190" fill="none" stroke="rgba(232,228,220,.08)" stroke-width="1"/>
+            <!-- inner ring — static -->
+            <circle cx="240" cy="240" r="140" fill="none" stroke="rgba(232,228,220,.08)" stroke-width="1"/>
+            <!-- dashed ring — slow spin -->
+            <circle class="eco-ring-dash" cx="240" cy="240" r="165" fill="none" stroke="rgba(166,150,224,.4)" stroke-width="1" stroke-dasharray="3 8"/>
+            <!-- nodes with glow pulse -->
+            <circle class="eco-node-glow" cx="240" cy="75" r="15" fill="none" stroke="#a696e0" stroke-opacity=".3"/>
+            <circle class="eco-node-core" cx="240" cy="75" r="8" fill="#a696e0"/>
+            <circle class="eco-node-glow" cx="405" cy="240" r="15" fill="none" stroke="#a696e0" stroke-opacity=".3" style="animation-delay:.75s"/>
+            <circle class="eco-node-core" cx="405" cy="240" r="8" fill="#a696e0" style="animation-delay:.75s"/>
+            <circle class="eco-node-glow" cx="240" cy="405" r="15" fill="none" stroke="#a696e0" stroke-opacity=".3" style="animation-delay:1.5s"/>
+            <circle class="eco-node-core" cx="240" cy="405" r="8" fill="#a696e0" style="animation-delay:1.5s"/>
+            <circle class="eco-node-glow" cx="75" cy="240" r="15" fill="none" stroke="#a696e0" stroke-opacity=".3" style="animation-delay:2.25s"/>
+            <circle class="eco-node-core" cx="75" cy="240" r="8" fill="#a696e0" style="animation-delay:2.25s"/>
+            <!-- arrows — spin with dashed ring -->
+            <g class="eco-arrows">
+              <text x="340" y="138" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" fill="#a696e0" transform="rotate(45,340,138)">&rarr;</text>
+              <text x="340" y="342" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" fill="#a696e0" transform="rotate(135,340,342)">&rarr;</text>
+              <text x="140" y="342" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" fill="#a696e0" transform="rotate(225,140,342)">&rarr;</text>
+              <text x="140" y="138" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="14" fill="#a696e0" transform="rotate(315,140,138)">&rarr;</text>
+            </g>
+            <!-- center text -->
+            <text x="240" y="230" text-anchor="middle" font-family="system-ui,-apple-system,'Segoe UI',Roboto,sans-serif" font-size="28" font-weight="300" fill="#faf8f4" letter-spacing="-1">One</text>
+            <text x="240" y="260" text-anchor="middle" font-family="'Cormorant Garamond',Georgia,serif" font-style="italic" font-size="28" font-weight="300" fill="#a696e0" letter-spacing="-0.5">Ecosystem.</text>
+          </svg>
+          <!-- HTML labels — positioned outside the SVG -->
+          <div class="eco-label-top">
+            <div class="metatag" style="color:var(--accent)">01</div>
+            <div class="eco-label-name" style="font-family:var(--en);font-size:16px;font-weight:300;color:var(--ink-0)">Content</div>
+            <div style="font-family:var(--ko);font-size:11px;color:var(--ink-2)">콘텐츠 제작</div>
+          </div>
+          <div class="eco-label-right">
+            <div class="metatag" style="color:var(--accent)">02</div>
+            <div class="eco-label-name" style="font-family:var(--en);font-size:16px;font-weight:300;color:var(--ink-0)">EnterTech</div>
+            <div style="font-family:var(--ko);font-size:11px;color:var(--ink-2)">오디오 &middot; AI</div>
+          </div>
+          <div class="eco-label-bottom">
+            <div class="metatag" style="color:var(--accent)">03</div>
+            <div class="eco-label-name" style="font-family:var(--en);font-size:16px;font-weight:300;color:var(--ink-0)">Flagship</div>
+            <div style="font-family:var(--ko);font-size:11px;color:var(--ink-2)">라이브 IP</div>
+          </div>
+          <div class="eco-label-left">
+            <div class="metatag" style="color:var(--accent)">04</div>
+            <div class="eco-label-name" style="font-family:var(--en);font-size:16px;font-weight:300;color:var(--ink-0)">Basis</div>
+            <div style="font-family:var(--ko);font-size:11px;color:var(--ink-2)">자본 &middot; RWA</div>
+          </div>
+        </div>
+
+        <!-- Right: why we won't fail -->
+        <div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:clamp(22px,3vw,32px);line-height:1.3;color:var(--ink-0);margin-bottom:32px;word-break:keep-all">
+            <span class="i18n" data-ko="공연을 처음 기획합니다." data-en="Planning live events for the first time.">공연을 처음 기획합니다.</span><br>
+            <span style="color:var(--accent)" class="i18n" data-ko="그것이 우리의 가장 강한 이유입니다." data-en="That is our strongest reason.">그것이 우리의 가장 강한 이유입니다.</span>
+          </div>
+          <div class="eco-reasons">
+            <div style="padding-bottom:18px;border-bottom:1px solid var(--border)">
+              <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:6px">[ 자금 ]</div>
+              <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+                data-ko="Basis의 라이브 엔터테인먼트 펀드가 안정적 선투자 구조를 구현합니다."
+                data-en="Basis Live Entertainment Fund provides stable pre-investment structure.">Basis의 라이브 엔터테인먼트 펀드가 안정적 선투자 구조를 구현합니다.</div>
+            </div>
+            <div style="padding-bottom:18px;border-bottom:1px solid var(--border)">
+              <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:6px">[ 운영 ]</div>
+              <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+                data-ko="아시아 12개 시장에서 BTS, BlackPink 공연을 수행한 월드클래스 파트너와 전략적 파트너십."
+                data-en="Strategic partnership with world-class group across 12+ Asian markets.">아시아 12개 시장에서 BTS, BlackPink 공연을 수행한 월드클래스 파트너와 전략적 파트너십.</div>
+            </div>
+            <div>
+              <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:6px">[ 기획 ]</div>
+              <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+                data-ko="글로벌 공연 투어 설계자를 내부화. 관성 없이 시작한다는 것은 더 나은 방법을 선택할 수 있다는 뜻입니다."
+                data-en="Internalized global tour architects. Starting without inertia means choosing better methods.">글로벌 공연 투어 설계자를 내부화. 관성 없이 시작한다는 것은 더 나은 방법을 선택할 수 있다는 뜻입니다.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRACK A/B/C — Business Tracks -->
+<section class="business-tracks-section fade-up">
+  <div class="content-max">
+    <div class="metatag" style="margin-bottom:14px">[ 004 &middot; BUSINESS TRACKS ]</div>
+    <h2 style="font-family:var(--en);font-weight:700;font-size:clamp(48px,8vw,120px);letter-spacing:-.04em;line-height:.92;text-transform:uppercase;margin-bottom:48px">PLAY BASED<br><span style="font-family:var(--serif);font-style:italic;font-weight:300;color:var(--accent);text-transform:none">music culture.</span></h2>
+
+    <div class="track-cards">
+      <div style="position:relative;overflow:hidden;border:1px solid var(--border)">
+        <div style="height:240px;overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=600&q=80&auto=format&fit=crop" alt="Festival stage" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.6)">
+        </div>
+        <div style="padding:24px">
+          <div class="metatag" style="color:var(--accent);margin-bottom:8px">Track A</div>
+          <div style="font-family:var(--en);font-size:24px;font-weight:700;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:12px">Direct Tour</div>
+          <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+            data-ko="버치사운드가 직접 기획·운영하는 멀티시티 페스티벌 투어."
+            data-en="Multi-city festival tour directly planned and operated by Birch Sound.">버치사운드가 직접 기획&middot;운영하는 멀티시티 페스티벌 투어.</div>
+        </div>
+      </div>
+      <div style="position:relative;overflow:hidden;border:1px solid var(--border)">
+        <div style="height:240px;overflow:hidden">
+          <img src="img/Gemini_Generated_Image_16l3n16l3n16l3n1.png" alt="IP License City" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.6)">
+        </div>
+        <div style="padding:24px">
+          <div class="metatag" style="color:var(--accent);margin-bottom:8px">Track B</div>
+          <div style="font-family:var(--en);font-size:24px;font-weight:700;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:12px">IP Licensing</div>
+          <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+            data-ko="콘텐츠 IP를 글로벌 시장에 라이선싱하여 스케일업."
+            data-en="Licensing content IP to global markets for scale-up.">콘텐츠 IP를 글로벌 시장에 라이선싱하여 스케일업.</div>
+        </div>
+      </div>
+      <div style="position:relative;overflow:hidden;border:1px solid var(--border)">
+        <div style="height:240px;overflow:hidden">
+          <img src="img/Gemini_Generated_Image_vexj7hvexj7hvexj.png" alt="Immersive media art exhibition" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.6)">
+        </div>
+        <div style="padding:24px">
+          <div class="metatag" style="color:var(--accent);margin-bottom:8px">Track C</div>
+          <div style="font-family:var(--en);font-size:24px;font-weight:700;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:12px">Media Art</div>
+          <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+            data-ko="AI, XR 등 첨단 기술 기반 몰입형 전시와 세계관 확장."
+            data-en="Immersive exhibitions and worldbuilding powered by AI, XR and emerging tech.">AI, XR 등 첨단 기술 기반 몰입형 전시와 세계관 확장.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -612,8 +721,8 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 <section class="flagship-section fade-up" id="flagship">
   <div class="content-max">
     <div class="flagship-meta-row">
-      <div class="metatag" style="color:var(--ink-2)">[ 005 &middot; FLAGSHIP IP ]</div>
-      <div class="metatag" style="color:var(--accent)">[ CONCEPT PREVIEW &middot; JULY 2026 &middot; SGP MAY 2027 ]</div>
+      <div class="metatag">[ 005 &middot; FLAGSHIP IP ]</div>
+      <div class="metatag" style="color:var(--accent)">[ CONCEPT PREVIEW &middot; JULY 2026 ]</div>
     </div>
 
     <h2 class="flagship-title">CITY<br><span class="outline">GATE.</span></h2>
@@ -621,72 +730,61 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
     <div class="flagship-grid">
       <div>
         <div class="flagship-quote i18n-html"
-          data-ko="&ldquo;아시아 어딘가의 도시에서,<br>20년 만에 자기 자신으로 돌아오는 세계.&rdquo;"
-          data-en="&ldquo;Somewhere in Asia,<br>a world where you return to yourself for the first time in twenty years.&rdquo;">"아시아 어딘가의 도시에서,<br>20년 만에 자기 자신으로 돌아오는 세계."</div>
-        <p class="flagship-desc i18n"
-          data-ko="아시아-태평양을 순회하는 멀티시티 음악 페스티벌 플랫폼. 브랜드 전체 공개는 2026년 7월 — 지금은 콘셉트 프리뷰."
-          data-en="Multi-city music festival platform touring Asia-Pacific. Full brand launch July 2026 — now in concept preview.">아시아-태평양을 순회하는 멀티시티 음악 페스티벌 플랫폼. 브랜드 전체 공개는 2026년 7월 &mdash; 지금은 콘셉트 프리뷰.</p>
-        <p class="flagship-desc i18n-html" style="color:var(--ink-2);margin-top:20px"
-          data-ko="아시아에서 가장 열심히 일해온 세대 &mdash; 그들이 <em class='flagship-emphasis'>마지막으로 진심으로 논 게</em> 언제였는가."
-          data-en="The hardest-working generation in Asia &mdash; when was the last time they <em class='flagship-emphasis'>truly played</em>?">아시아에서 가장 열심히 일해온 세대 &mdash; 그들이 <em class="flagship-emphasis">마지막으로 진심으로 논 게</em> 언제였는가.</p>
+          data-ko="&ldquo;하나의 도시, 하나의 밤,<br>당신이 가장 살아있는 순간.&rdquo;"
+          data-en="&ldquo;One city, one night,<br>the moment you feel most alive.&rdquo;">&ldquo;하나의 도시, 하나의 밤,<br>당신이 가장 살아있는 순간.&rdquo;</div>
+        <p class="flagship-desc i18n-html" style="color:var(--ink-2)"
+          data-ko="아시아의 모든 도시에서, <em class='flagship-emphasis'>하나의 무대로 연결되는 순간.</em>"
+          data-en="Across every city in Asia, <em class='flagship-emphasis'>connected through one stage.</em>">아시아의 모든 도시에서, <em class="flagship-emphasis">하나의 무대로 연결되는 순간.</em></p>
 
         <div style="margin-top:32px">
-          <div class="metatag" style="color:var(--ink-2);margin-bottom:12px">[ ARTIST ARCHITECTURE ]</div>
+          <div class="metatag" style="margin-bottom:12px">[ ARTIST ARCHITECTURE ]</div>
           <p class="i18n-html" style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)"
             data-ko="Global Headliner &times; K-Pop Act &times; Local City Act<br>집단적 기억 &times; 현재의 파동 &times; 지역의 정체성"
             data-en="Global Headliner &times; K-Pop Act &times; Local City Act<br>Collective memory &times; Present wave &times; Local identity">Global Headliner &times; K-Pop Act &times; Local City Act<br>집단적 기억 &times; 현재의 파동 &times; 지역의 정체성</p>
         </div>
-        <div style="margin-top:20px">
-          <div class="metatag" style="color:var(--ink-2);margin-bottom:8px">[ PHILOSOPHY ]</div>
-          <p class="i18n" style="font-family:var(--ko);font-size:14px;color:var(--ink-1)"
-            data-ko="Play Based Music Culture — 놀이에서 시작하는 음악 경험"
-            data-en="Play Based Music Culture — music experience born from play">Play Based Music Culture &mdash; 놀이에서 시작하는 음악 경험</p>
-        </div>
-        <div style="margin-top:12px">
-          <div class="metatag" style="color:var(--ink-2);margin-bottom:8px">[ FORMAT ]</div>
-          <p class="i18n" style="font-family:var(--ko);font-size:14px;color:var(--ink-1)"
-            data-ko="대규모 라이브 엔터테인먼트 플랫폼 (멀티시티 순회)"
-            data-en="Large-scale live entertainment platform (multi-city tour)">대규모 라이브 엔터테인먼트 플랫폼 (멀티시티 순회)</p>
-        </div>
-        <div style="margin-top:12px">
-          <div class="metatag" style="color:var(--ink-2);margin-bottom:8px">[ SCHEDULE ]</div>
-          <p class="i18n" style="font-family:var(--ko);font-size:14px;color:var(--ink-1)"
-            data-ko="브랜드 전체 공개 2026년 7월 예정 — 현재 콘셉트 프리뷰 공개 중"
-            data-en="Full brand launch July 2026 — concept preview now live">브랜드 전체 공개 2026년 7월 예정 &mdash; 현재 콘셉트 프리뷰 공개 중</p>
-        </div>
-
-        <div class="track-grid">
-          <div class="track-cell">
-            <div class="track-letter">A</div>
-            <div class="metatag" style="color:var(--ink-1);margin-top:6px">Direct Tour</div>
-            <div class="i18n" style="font-family:var(--ko);font-size:12px;color:var(--ink-2);margin-top:4px"
-              data-ko="직접 기획·운영"
-              data-en="Direct planning & operation">직접 기획&middot;운영</div>
-          </div>
-          <div class="track-cell">
-            <div class="track-letter">B</div>
-            <div class="metatag" style="color:var(--ink-1);margin-top:6px">IP Licensing</div>
-            <div class="i18n" style="font-family:var(--ko);font-size:12px;color:var(--ink-2);margin-top:4px"
-              data-ko="로컬 프로모터 라이선싱"
-              data-en="Local promoter licensing">로컬 프로모터 라이선싱</div>
-          </div>
-          <div class="track-cell">
-            <div class="track-letter">C</div>
-            <div class="metatag" style="color:var(--ink-1);margin-top:6px">Media Art</div>
-            <div class="i18n" style="font-family:var(--ko);font-size:12px;color:var(--ink-2);margin-top:4px"
-              data-ko="연중 전시·세계관 확장"
-              data-en="Year-round exhibition & worldbuilding">연중 전시&middot;세계관 확장</div>
-          </div>
-        </div>
 
         <div style="margin-top:32px">
-          <div class="metatag" style="color:var(--accent)">[ Concept Preview ] &mdash; Full Brand Launch July 2026 &middot; Singapore Flagship &mdash; May 2027</div>
+          <div class="metatag" style="margin-bottom:8px">[ PHILOSOPHY ]</div>
+          <p class="i18n" style="font-family:var(--ko);font-size:14px;color:var(--ink-1)"
+            data-ko="경험하지 않으면 설명할 수 없는 무대. 그것이 CITY GATE."
+            data-en="A stage you can't explain without experiencing it. That is CITY GATE.">경험하지 않으면 설명할 수 없는 무대. 그것이 CITY GATE.</p>
+        </div>
+
+        <!-- AI Virtual / AR Live / NORY CITY -->
+        <div class="flagship-detail-grid">
+          <div>
+            <div style="position:relative;height:180px;overflow:hidden;margin-bottom:16px">
+              <img src="img/detail/flagship.png" alt="AI Media Art Stage" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.7)">
+            </div>
+            <div class="metatag" style="color:var(--accent);margin-bottom:6px">AI VIRTUAL</div>
+            <div style="font-family:var(--ko);font-size:13px;line-height:1.6;color:var(--ink-1)" class="i18n"
+              data-ko="AI 생성형 미디어아트와 실시간 무대 연출. 매 공연이 유일한 경험."
+              data-en="AI generative media art and real-time stage direction. Every show is unique.">AI 생성형 미디어아트와 실시간 무대 연출. 매 공연이 유일한 경험.</div>
+          </div>
+          <div>
+            <div style="position:relative;height:180px;overflow:hidden;margin-bottom:16px">
+              <img src="img/ar-glasses-eminem.png" alt="AR Glasses Experience" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.7)">
+            </div>
+            <div class="metatag" style="color:var(--accent);margin-bottom:6px">AR LIVE</div>
+            <div style="font-family:var(--ko);font-size:13px;line-height:1.6;color:var(--ink-1)" class="i18n"
+              data-ko="AR 글래스와 모바일로 무대 위에 덧입혀진 시각적 레이어를 경험."
+              data-en="Experience visual layers overlaid on stage through AR glasses and mobile.">AR 글래스와 모바일로 무대 위에 덧입혀진 시각적 레이어를 경험.</div>
+          </div>
+          <div>
+            <div style="position:relative;height:180px;overflow:hidden;margin-bottom:16px">
+              <img src="img/nory-city-hero.png" alt="NORY CITY" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.7)">
+            </div>
+            <div class="metatag" style="color:var(--accent);margin-bottom:6px">NORY CITY</div>
+            <div style="font-family:var(--ko);font-size:13px;line-height:1.6;color:var(--ink-1)" class="i18n"
+              data-ko="공연이 끝나도 세계는 계속됩니다. 연중 디지털 세계관 플랫폼."
+              data-en="The world continues after the show. Year-round digital worldbuilding platform.">공연이 끝나도 세계는 계속됩니다. 연중 디지털 세계관 플랫폼.</div>
+          </div>
         </div>
       </div>
 
       <!-- Images -->
       <div class="flagship-images">
-        <div style="width:100%;height:460px;position:relative;overflow:hidden">
+        <div class="flagship-main-img">
           <img src="img/033.png" alt="Stadium concert" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.8)">
           <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0.15),rgba(10,10,12,0.55))"></div>
         </div>
@@ -703,208 +801,69 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
       </div>
     </div>
 
-    <!-- FOR ARTISTS -->
-    <div class="for-artists fade-up">
-      <div class="metatag" style="color:var(--ink-2);margin-bottom:14px">[ FOR ARTISTS ]</div>
-      <h3 class="for-artists-title">WHY WE WON'T <span style="font-family:var(--serif);font-style:italic;font-weight:300;color:var(--accent);text-transform:none">Fail.</span></h3>
-      <div class="for-artists-body">
-        <p class="i18n"
-          data-ko="공연이 실패하는 세 가지 이유 — 자금 부족, 운영 미숙, 전략 공백. 처음부터 구조적으로 제거했습니다."
-          data-en="Three reasons concerts fail — underfunding, operational inexperience, strategic gaps. We eliminated all three from day one.">공연이 실패하는 세 가지 이유 — 자금 부족, 운영 미숙, 전략 공백. 처음부터 구조적으로 제거했습니다.</p>
-      </div>
-      <div class="for-artists-points">
-        <div class="fa-point">
-          <div class="fa-point-title i18n"
-            data-ko="[ 자금 ]"
-            data-en="[ FUNDING ]">[ 자금 ]</div>
-          <div class="fa-point-body i18n"
-            data-ko="Basis Asset Management의 라이브 엔터테인먼트 펀드가 안정적 선투자 구조를 구현합니다."
-            data-en="Basis Asset Management's Live Entertainment Fund provides stable pre-investment structure.">Basis Asset Management의 라이브 엔터테인먼트 펀드가 안정적 선투자 구조를 구현합니다.</div>
-        </div>
-        <div class="fa-point">
-          <div class="fa-point-title i18n"
-            data-ko="[ 운영 리스크 ]"
-            data-en="[ OPERATIONAL RISK ]">[ 운영 리스크 ]</div>
-          <div class="fa-point-body i18n"
-            data-ko="아시아 12개 이상 시장에서 BTS, BlackPink 등 글로벌 아티스트 공연을 수행한 월드클래스 엔터테인먼트 그룹과의 전략적 파트너십으로 현장 운영을 책임집니다."
-            data-en="Strategic partnership with a world-class group that has produced BTS, BlackPink and global artist shows across 12+ Asian markets.">아시아 12개 이상 시장에서 BTS, BlackPink 등 글로벌 아티스트 공연을 수행한 월드클래스 엔터테인먼트 그룹과의 전략적 파트너십으로 현장 운영을 책임집니다.</div>
-        </div>
-        <div class="fa-point">
-          <div class="fa-point-title i18n"
-            data-ko="[ 공연 기획 ]"
-            data-en="[ TOUR ARCHITECTURE ]">[ 공연 기획 ]</div>
-          <div class="fa-point-body i18n"
-            data-ko="대규모 글로벌 공연 투어 설계자를 내부화하면서 관성 없이 시작한다는 것은, 더 나은 방법을 선택할 수 있다는 뜻입니다."
-            data-en="Internalizing global tour architects while starting without inertia means choosing better methods.">대규모 글로벌 공연 투어 설계자를 내부화하면서 관성 없이 시작한다는 것은, 더 나은 방법을 선택할 수 있다는 뜻입니다.</div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- ECOSYSTEM -->
-<section class="eco-section fade-up" id="ecosystem">
-  <div class="content-max">
-    <div class="metatag" style="color:var(--ink-2);margin-bottom:14px">[ 007 &middot; ECOSYSTEM ]</div>
-    <h2 class="eco-heading">ONE ECOSYSTEM.<br><span class="italic-accent">Four Engines.</span></h2>
-    <div class="eco-intro i18n"
-      data-ko="각각의 사업은 독립적으로 작동하지만, 함께할 때 비로소 전체가 됩니다."
-      data-en="Each business operates independently, but becomes whole only together.">각각의 사업은 독립적으로 작동하지만, 함께할 때 비로소 전체가 됩니다.</div>
-
-    <!-- Cycle -->
-    <div class="cycle-grid fade-up">
-      <div class="cycle-step">
-        <div class="cycle-num">[ 01 ]</div>
-        <div class="cycle-text i18n"
-          data-ko="콘텐츠(AKATV)가 오디오 플랫폼에서 관객 데이터를 만들고"
-          data-en="Content (AKATV) generates audience data through audio platforms">콘텐츠(AKATV)가 오디오 플랫폼에서 관객 데이터를 만들고</div>
-        <div class="cycle-arrow">&rarr;</div>
-      </div>
-      <div class="cycle-step">
-        <div class="cycle-num">[ 02 ]</div>
-        <div class="cycle-text i18n"
-          data-ko="데이터(EnterTech) + AI 버추얼 기술이 라이브 공연의 아티스트 선택과 무대 경험을 정밀하게 하고"
-          data-en="Data (EnterTech) + AI virtual tech refines artist selection and stage experience">데이터(EnterTech) + AI 버추얼 기술이 라이브 공연의 아티스트 선택과 무대 경험을 정밀하게 하고</div>
-        <div class="cycle-arrow">&rarr;</div>
-      </div>
-      <div class="cycle-step">
-        <div class="cycle-num">[ 03 ]</div>
-        <div class="cycle-text i18n"
-          data-ko="공연 IP가 기술과 감성 위에서 실물 자산이 되고"
-          data-en="Live IP becomes real-world asset on tech and emotion">공연 IP가 기술과 감성 위에서 실물 자산이 되고</div>
-        <div class="cycle-arrow">&rarr;</div>
-      </div>
-      <div class="cycle-step">
-        <div class="cycle-num">[ 04 ]</div>
-        <div class="cycle-text i18n"
-          data-ko="자산(Basis / RWA)의 수익이 다시 콘텐츠 제작에 투자됩니다"
-          data-en="Asset returns (Basis / RWA) reinvest into content production">자산(Basis / RWA)의 수익이 다시 콘텐츠 제작에 투자됩니다</div>
-      </div>
+<!-- VISION — full-width, before Contact -->
+<section class="vision-section fade-up">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="metatag" style="color:var(--accent);margin-bottom:28px">[ THE WORLD WE ARE BUILDING ]</div>
+    <h2 style="font-family:var(--en);font-weight:700;font-size:clamp(48px,10vw,120px);letter-spacing:-.04em;line-height:.95;text-transform:uppercase;margin-bottom:48px">THE WORLD<br>WE ARE <span style="font-family:var(--serif);font-style:italic;font-weight:300;color:var(--accent);text-transform:none">Building.</span></h2>
+    <div style="font-family:var(--ko);font-size:clamp(17px,2.5vw,22px);line-height:1.75;color:var(--ink-1);word-break:keep-all">
+      <p class="i18n" data-ko="콘텐츠 창작자가 자신의 IP로 직접 자산을 만들 수 있고," data-en="Where content creators build assets directly from their own IP,">콘텐츠 창작자가 자신의 IP로 직접 자산을 만들 수 있고,</p>
+      <p class="i18n" data-ko="팬이 사랑하는 아티스트의 성장에 투자할 수 있으며," data-en="where fans can invest in the growth of artists they love,">팬이 사랑하는 아티스트의 성장에 투자할 수 있으며,</p>
+      <p class="i18n" style="color:var(--accent)"
+        data-ko="CITY GATE가 열리는 모든 도시에서, 음악이 만드는 가장 강렬한 경험의 세계."
+        data-en="In every city where CITY GATE opens, the most intense experience music can create.">CITY GATE가 열리는 모든 도시에서, 음악이 만드는 가장 강렬한 경험의 세계.</p>
     </div>
-
-    <div class="metatag i18n" style="color:var(--ink-0);margin-bottom:20px;font-size:12px"
-      data-ko="이것이 Birch Sound가 설계하는 엔터테인먼트의 순환 구조입니다."
-      data-en="This is the entertainment cycle Birch Sound architects.">이것이 Birch Sound가 설계하는 엔터테인먼트의 순환 구조입니다.</div>
-
-    <!-- Engine table -->
-    <div class="engine-table fade-up">
-      <div class="engine-table-cell">
-        <div class="engine-table-city">Birchsound Korea</div>
-        <div class="engine-table-role i18n"
-          data-ko="콘텐츠 제작 & 유통"
-          data-en="Content Production & Distribution">콘텐츠 제작 &amp; 유통</div>
-      </div>
-      <div class="engine-table-cell">
-        <div class="engine-table-city">Hong Kong</div>
-        <div class="engine-table-role i18n"
-          data-ko="오디오 인텔리전스 & AI 버추얼 기술"
-          data-en="Audio Intelligence & AI Virtual Tech">오디오 인텔리전스 &amp; AI 버추얼 기술</div>
-      </div>
-      <div class="engine-table-cell">
-        <div class="engine-table-city">Singapore</div>
-        <div class="engine-table-role i18n"
-          data-ko="자본 & 투자 & IP 자산화 (RWA)"
-          data-en="Capital & Investment & IP Tokenization (RWA)">자본 &amp; 투자 &amp; IP 자산화 (RWA)</div>
-      </div>
-      <div class="engine-table-cell">
-        <div class="engine-table-city">Flagship Festival</div>
-        <div class="engine-table-role i18n"
-          data-ko="라이브 경험 플랫폼"
-          data-en="Live Experience Platform">라이브 경험 플랫폼</div>
-      </div>
-    </div>
-
-    <!-- Why Now -->
-    <div class="why-now fade-up">
-      <div class="metatag" style="color:var(--ink-2);margin-bottom:14px">[ WHY NOW ]</div>
-      <h3 class="why-now-title">THE MOMENT IS <span style="font-family:var(--serif);font-style:italic;font-weight:300;color:var(--accent);text-transform:none">Now.</span></h3>
-      <p class="i18n" style="font-family:var(--ko);font-size:16px;line-height:1.75;color:var(--ink-1);max-width:var(--body-max);margin-bottom:32px"
-        data-ko="세 가지 거대한 변화가 동시에 일어나고 있습니다. 버치사운드는 이 세 개의 파도가 교차하는 지점에 서 있습니다."
-        data-en="Three massive shifts are converging. Birch Sound stands at their intersection.">세 가지 거대한 변화가 동시에 일어나고 있습니다. 버치사운드는 이 세 개의 파도가 교차하는 지점에 서 있습니다.</p>
-      <div class="wave-cards">
-        <div class="wave-card">
-          <div class="wave-card-num">[ WAVE 01 · APAC LIVE MARKET ]</div>
-          <div class="wave-card-metric">+34% <span style="font-size:14px;font-weight:300">CAGR</span></div>
-          <div class="wave-card-title i18n"
-            data-ko="아시아 라이브 시장 폭발"
-            data-en="APAC Live Market Explosion">아시아 라이브 시장 폭발</div>
-          <div class="wave-card-body i18n"
-            data-ko="팬데믹 이후 아시아-태평양 라이브 공연 시장, 전례 없는 속도로 회복. 억눌린 경험의 수요 폭발."
-            data-en="Post-pandemic APAC live market recovering at unprecedented speed. Pent-up demand exploding.">팬데믹 이후 아시아-태평양 라이브 공연 시장, 전례 없는 속도로 회복. 억눌린 경험의 수요 폭발.</div>
-        </div>
-        <div class="wave-card">
-          <div class="wave-card-num">[ WAVE 02 · AI × VIRTUAL CONTENT ]</div>
-          <div class="wave-card-metric">&times;3.8 <span style="font-size:14px;font-weight:300">Investment Growth</span></div>
-          <div class="wave-card-title i18n"
-            data-ko="AI & 버추얼 콘텐츠 르네상스"
-            data-en="AI & Virtual Content Renaissance">AI &amp; 버추얼 콘텐츠 르네상스</div>
-          <div class="wave-card-body i18n"
-            data-ko="AI 버추얼 콘텐츠와 인터랙티브 기술, 가장 빠르게 성장하는 포맷. 관객은 소비자에서 참여자로."
-            data-en="AI virtual content and interactive tech — fastest growing format. Audiences evolving from consumers to participants.">AI 버추얼 콘텐츠와 인터랙티브 기술, 가장 빠르게 성장하는 포맷. 관객은 소비자에서 참여자로.</div>
-        </div>
-        <div class="wave-card">
-          <div class="wave-card-num">[ WAVE 03 · ENTERTAINMENT RWA ]</div>
-          <div class="wave-card-metric">US$ 2.3T <span style="font-size:14px;font-weight:300">by 2030</span></div>
-          <div class="wave-card-title i18n"
-            data-ko="엔터테인먼트 IP 자산화 원년"
-            data-en="Year One of Entertainment IP Tokenization">엔터테인먼트 IP 자산화 원년</div>
-          <div class="wave-card-body i18n"
-            data-ko="RWA 토큰 증권 시장이 글로벌 규제 안으로. 엔터테인먼트 IP는 차세대 RWA 카테고리로 부상."
-            data-en="RWA token securities entering global regulatory frameworks. Entertainment IP emerging as the next RWA category.">RWA 토큰 증권 시장이 글로벌 규제 안으로. 엔터테인먼트 IP는 차세대 RWA 카테고리로 부상.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Vision -->
-    <div class="vision fade-up">
-      <div class="metatag" style="color:var(--accent);margin-bottom:14px">[ THE WORLD WE ARE BUILDING ]</div>
-      <h3 class="vision-title">THE WORLD WE ARE <span style="font-family:var(--serif);font-style:italic;font-weight:300;color:var(--accent);text-transform:none">Building.</span></h3>
-      <div class="vision-sub i18n"
-        data-ko="우리가 만드는 세계는 이렇습니다."
-        data-en="This is the world we are building.">우리가 만드는 세계는 이렇습니다.</div>
-      <ul class="vision-list">
-        <li class="i18n"
-          data-ko="콘텐츠 창작자가 자신의 IP로 직접 자산을 만들 수 있고"
-          data-en="Where content creators build assets directly from their own IP">콘텐츠 창작자가 자신의 IP로 직접 자산을 만들 수 있고</li>
-        <li class="i18n"
-          data-ko="팬이 자신이 사랑하는 아티스트의 성장에 투자할 수 있으며"
-          data-en="Where fans can invest in the growth of artists they love">팬이 자신이 사랑하는 아티스트의 성장에 투자할 수 있으며</li>
-        <li class="i18n"
-          data-ko="오랫동안 일하느라 놀기를 잊었던 세대가 아시아 어딘가의 도시에서 CITY GATE를 통과하며 20년 만에 자기 자신으로 돌아오는 세계"
-          data-en="Where a generation that forgot to play passes through CITY GATE somewhere in Asia and returns to themselves for the first time in twenty years">오랫동안 일하느라 놀기를 잊었던 세대가 아시아 어딘가의 도시에서 CITY GATE를 통과하며 20년 만에 자기 자신으로 돌아오는 세계</li>
-      </ul>
-      <div class="vision-footer i18n"
-        data-ko="그것이 Birch Sound가 만드는 엔터테인먼트 생태계입니다."
-        data-en="That is the entertainment ecosystem Birch Sound builds.">그것이 Birch Sound가 만드는 엔터테인먼트 생태계입니다.</div>
-    </div>
+    <div style="margin-top:48px;font-family:var(--ko);font-size:16px;color:var(--ink-0);font-weight:500" class="i18n"
+      data-ko="그것이 Birch Sound가 만드는 엔터테인먼트 생태계입니다."
+      data-en="That is the entertainment ecosystem Birch Sound builds.">그것이 Birch Sound가 만드는 엔터테인먼트 생태계입니다.</div>
   </div>
 </section>
 
 <!-- CONTACT -->
 <section class="contact-section fade-up" id="contact">
-  <div class="metatag" style="color:var(--ink-2);margin-bottom:28px">[ 006 &middot; CONTACT ]</div>
+  <div class="metatag" style="margin-bottom:28px">[ 006 &middot; CONTACT ]</div>
   <h2 class="contact-heading">TALK<br>TO <span class="italic-accent">us.</span></h2>
 
   <div class="contact-ctas">
-    <a href="mailto:biz@birchsound.net" class="cta-primary">[ CONTACT ME &rarr; ]</a>
-    <a href="mailto:biz@birchsound.net?subject=Artist%20%2F%20Partner%20Inquiry" class="cta-secondary">[ ARTIST &middot; PARTNER ]</a>
+    <button class="cta-primary" onclick="openContactModal('business')">[ CONTACT ME &rarr; ]</button>
+    <button class="cta-secondary" onclick="openContactModal('artist')">[ ARTIST &middot; PARTNER ]</button>
+  </div>
+
+  <!-- Contact Modal -->
+  <div id="contactModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center">
+    <div class="contact-modal-inner">
+      <button onclick="closeContactModal()" style="position:absolute;top:16px;right:16px;font-size:20px;color:var(--ink-2);cursor:pointer;background:none;border:none;padding:8px;min-height:44px;min-width:44px">&times;</button>
+      <div class="metatag" style="margin-bottom:24px" id="modalLabel">[ CONTACT ]</div>
+      <form action="https://formsubmit.co/biz@birchsound.net" method="POST">
+        <input type="hidden" name="_subject" id="formSubject" value="Website Inquiry">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <input name="name" placeholder="Name" required style="background:var(--bg-alt);border:1px solid var(--border);color:var(--ink-0);padding:14px 16px;font-family:var(--ko);font-size:14px;outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          <input name="email" type="email" placeholder="Email" required style="background:var(--bg-alt);border:1px solid var(--border);color:var(--ink-0);padding:14px 16px;font-family:var(--ko);font-size:14px;outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          <input name="company" placeholder="Company (optional)" style="background:var(--bg-alt);border:1px solid var(--border);color:var(--ink-0);padding:14px 16px;font-family:var(--ko);font-size:14px;outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          <textarea name="message" placeholder="Message" rows="5" required style="background:var(--bg-alt);border:1px solid var(--border);color:var(--ink-0);padding:14px 16px;font-family:var(--ko);font-size:14px;resize:vertical;outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+          <button type="submit" class="cta-primary" style="width:100%;text-align:center;cursor:pointer">[ SEND &rarr; ]</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <div class="contact-grid">
     <div class="contact-cell">
       <div class="metatag contact-cell-label">[ SEOUL &middot; HQ ]</div>
-      <div class="i18n-html" style="font-family:var(--ko);font-size:14px;line-height:1.7;color:var(--ink-0)"
+      <div class="i18n-html" style="font-family:var(--ko);font-size:14px;line-height:1.7;color:var(--ink-1)"
         data-ko="서울시 종로구<br>새문안로 5길 13, 401호"
-        data-en="13, Saemunnan-ro 5-gil,<br>Jongno-gu, Seoul, Korea">
-        서울시 종로구<br>새문안로 5길 13, 401호
-      </div>
-      <div class="metatag i18n" style="color:var(--ink-2);margin-top:12px"
-        data-ko="대표 김한수 · 303-81-78629"
-        data-en="CEO Hansoo Kim · 303-81-78629">대표 김한수 &middot; 303-81-78629</div>
+        data-en="13, Saemunnan-ro 5-gil,<br>Jongno-gu, Seoul, Korea">서울시 종로구<br>새문안로 5길 13, 401호</div>
+      <div class="metatag i18n" style="margin-top:12px" data-ko="대표 김한수 · 303-81-78629" data-en="CEO Hansoo Kim · 303-81-78629">대표 김한수 &middot; 303-81-78629</div>
     </div>
     <div class="contact-cell">
       <div class="metatag contact-cell-label">[ CONTACT ]</div>
-      <div style="font-family:var(--mono);font-size:14px;line-height:1.9;color:var(--ink-0)">
+      <div style="font-family:var(--mono);font-size:14px;line-height:1.9;color:var(--ink-1)">
         T &nbsp; 02-548-9300<br>
         F &nbsp; 070-7507-9300<br>
         M &nbsp; biz@birchsound.net
@@ -912,7 +871,7 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
     </div>
     <div class="contact-cell">
       <div class="metatag contact-cell-label">[ GLOBAL ]</div>
-      <div style="font-family:var(--en);font-size:14px;line-height:1.9;color:var(--ink-0)">
+      <div style="font-family:var(--en);font-size:14px;line-height:1.9;color:var(--ink-1)">
         Singapore &mdash; Capital<br>
         Seoul &mdash; Content<br>
         Hong Kong &mdash; EnterTech
@@ -925,29 +884,47 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
 <footer class="footer">
   <div>
     <div class="footer-logo">BIRCH SOUND &copy;</div>
-    <div class="metatag" style="color:var(--ink-2);margin-top:6px">Formerly AKATV &mdash; est. 2015</div>
+    <div class="metatag" style="margin-top:6px">Formerly AKATV &mdash; est. 2015</div>
   </div>
   <div class="footer-nav">
     <a href="#about">About</a>
     <a href="#business">Business</a>
     <a href="#flagship">Flagship</a>
-    <a href="#ecosystem">Ecosystem</a>
     <a href="#contact">Contact</a>
   </div>
   <div class="footer-right">
-    <div class="footer-social">
-      <a href="#" aria-label="Instagram">Instagram</a>
-      <a href="#" aria-label="LinkedIn">LinkedIn</a>
-      <a href="#" aria-label="YouTube">YouTube</a>
-    </div>
-    <div>&copy; 2025 Birch Sound. All rights reserved.</div>
-    <div style="margin-top:4px">Singapore &middot; Seoul, Korea &middot; HongKong</div>
+    <div>&copy; 2026 Birch Sound Global Pte. Ltd.</div>
+    <div style="margin-top:4px">Singapore &middot; Seoul, Korea &middot; Hong Kong</div>
     <div style="margin-top:2px">contact@birchsoundglobal.com</div>
   </div>
 </footer>
 
 <!-- SCRIPTS -->
 <script>
+// Contact modal
+function openContactModal(type){
+  var m=document.getElementById('contactModal');
+  var label=document.getElementById('modalLabel');
+  var subj=document.getElementById('formSubject');
+  if(type==='artist'){
+    label.textContent='[ ARTIST \u00B7 PARTNER ]';
+    subj.value='Artist / Partner Inquiry';
+  }else{
+    label.textContent='[ CONTACT ]';
+    subj.value='Business Inquiry';
+  }
+  m.style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function closeContactModal(){
+  var m=document.getElementById('contactModal');
+  m.style.display='none';
+  document.body.style.overflow='';
+}
+document.getElementById('contactModal').addEventListener('click',function(e){
+  if(e.target===this) closeContactModal();
+});
+
 // Fade-up on scroll
 (function(){
   var observer = new IntersectionObserver(function(entries){
@@ -998,35 +975,44 @@ button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
   }
 })();
 
-// Language toggle (KO/EN)
+// Scroll nav — show after hero
 (function(){
-  var btn = document.getElementById('langToggle');
-  var lang = 'ko';
+  var nav = document.getElementById('scrollNav');
+  var hero = document.getElementById('hero');
+  if(!nav || !hero) return;
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting) nav.classList.remove('visible');
+      else nav.classList.add('visible');
+    });
+  }, {threshold: 0.1});
+  observer.observe(hero);
+})();
 
+// Language toggle (KO/EN) — both hero and scroll nav
+(function(){
+  var scrollBtn = document.getElementById('langToggle');
+  var heroBtn = document.getElementById('heroLangToggle');
+  var lang = 'ko';
   function applyLanguage(targetLang) {
-    // Plain text elements (.i18n) — swap textContent
     document.querySelectorAll('.i18n').forEach(function(el){
       var text = el.getAttribute('data-' + targetLang);
       if (text) el.textContent = text;
     });
-
-    // HTML elements (.i18n-html) — swap innerHTML
     document.querySelectorAll('.i18n-html').forEach(function(el){
       var html = el.getAttribute('data-' + targetLang);
       if (html) el.innerHTML = html;
     });
-
-    // Update html lang attribute
     document.documentElement.lang = targetLang;
   }
-
-  if(btn){
-    btn.addEventListener('click', function(){
-      lang = lang === 'ko' ? 'en' : 'ko';
-      btn.textContent = lang === 'ko' ? 'KO / EN' : 'EN / KO';
-      applyLanguage(lang);
-    });
+  function toggle(){
+    lang = lang === 'ko' ? 'en' : 'ko';
+    if(scrollBtn) scrollBtn.textContent = lang === 'ko' ? 'KO / EN' : 'EN / KO';
+    if(heroBtn) heroBtn.textContent = lang === 'ko' ? '[ KO / EN ]' : '[ EN / KO ]';
+    applyLanguage(lang);
   }
+  if(scrollBtn) scrollBtn.addEventListener('click', toggle);
+  if(heroBtn) heroBtn.addEventListener('click', toggle);
 })();
 </script>
 </body>
