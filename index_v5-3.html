@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIRCH SOUND INC. — Built for Live</title>
+<meta name="description" content="Ten years of content, capital, and technology. All converging on one stage.">
+<meta property="og:title" content="BIRCH SOUND INC. — Built for Live">
+<meta property="og:description" content="Content · Capital · Technology · Live IP — 10년의 콘텐츠, 자본, 기술이 단 하나의 무대로 수렴합니다.">
+<meta property="og:image" content="https://nextsunny-ai.github.io/birchsound-web-3/img/og-image.png">
+<meta property="og:url" content="https://nextsunny-ai.github.io/birchsound-web-3/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BIRCH SOUND INC. — Built for Live">
+<meta name="twitter:description" content="Content · Capital · Technology · Live IP">
+<meta name="twitter:image" content="https://nextsunny-ai.github.io/birchsound-web-3/img/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{background:var(--bg);color:var(--ink-0);overflow-x:hidden;font-feature-settings:"ss01","cv11","tnum"}
+
+[data-ko], .i18n, .i18n-html {word-break:keep-all}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img{display:block;max-width:100%}
+button{border:none;background:none;cursor:pointer;font:inherit;color:inherit}
+
+:root{
+  --bg:#0a0a0c;
+  --bg-alt:#07070a;
+  --ink-0:#faf8f4;
+  --ink-1:rgba(232,228,220,.72);
+  --ink-2:rgba(232,228,220,.38);
+  --accent:#a696e0;
+  --border:rgba(232,228,220,.14);
+  --border-strong:rgba(232,228,220,.25);
+  --en:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --ko:'Pretendard',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono','IBM Plex Mono',monospace;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --max-w:1200px;
+  --body-max:640px;
+  --px:36px;
+}
+@media(max-width:768px){:root{--px:18px}}
+
+::selection{background:var(--accent);color:var(--ink-0)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+html{scrollbar-width:thin;scrollbar-color:var(--accent) transparent}
+
+.metatag{font-family:'JetBrains Mono','Pretendard','IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;line-height:1.5;color:var(--ink-2)}
+.content-max{max-width:var(--max-w);margin:0 auto}
+
+.fade-up{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* Noise overlay */
+.noise{position:relative}
+.noise::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");mix-blend-mode:overlay;opacity:.5}
+
+/* Hair rules */
+.hr-thin{height:1px;background:linear-gradient(90deg,transparent,rgba(232,228,220,.3),transparent)}
+
+/* NAV — hidden by default, appears on scroll */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px var(--px);display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,12,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transform:translateY(-100%);opacity:0;transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .35s ease}
+.nav.visible{transform:translateY(0);opacity:1}
+.nav-logo{display:flex;align-items:center}
+.nav-logo img{height:24px;width:auto}
+.nav-links{display:flex;gap:28px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nav-links a{color:var(--ink-2);transition:color .2s}
+.nav-links a:hover{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.lang-toggle{padding:5px 12px;border:1px solid var(--border-strong);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-0);background:transparent;cursor:pointer;transition:all .2s;min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
+.lang-toggle:hover{border-color:var(--accent);color:var(--accent)}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px;min-height:44px;min-width:44px;align-items:center;justify-content:center}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--ink-0)}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,12,.96);padding:24px var(--px);border-bottom:1px solid var(--border);gap:16px}
+  .hamburger{display:flex}
+}
+
+/* HERO */
+.hero{position:relative;height:100vh;min-height:720px;overflow:hidden}
+.hero-topbar{position:absolute;top:0;left:0;right:0;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;gap:0;padding:32px var(--px) 0;color:var(--ink-0);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.hero-topbar-nav{display:flex;gap:24px}
+.hero-topbar-nav a{color:var(--ink-2);transition:color .2s;text-decoration:none}
+.hero-topbar-nav a:hover{color:var(--accent)}
+.hero-topbar-lang{cursor:pointer;transition:color .2s}
+.hero-topbar-lang:hover{color:var(--accent)}
+@media(max-width:768px){.hero-topbar{grid-template-columns:1fr 1fr;gap:8px;padding-top:32px;font-size:9px}.hero-topbar>div:nth-child(2){display:none}}
+.hero-bg{position:absolute;inset:0}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(900px 700px at 50% 65%,rgba(61,43,108,.45) 0%,rgba(10,10,12,.9) 80%),linear-gradient(180deg,rgba(10,10,12,.55) 0%,rgba(10,10,12,.75) 100%)}
+.hero-title-block{position:absolute;left:0;right:0;top:50%;transform:translateY(-55%);z-index:4;padding:0 var(--px);text-align:center}
+.hero-title{font-family:var(--en);font-weight:700;font-size:clamp(48px,15vw,232px);letter-spacing:-.045em;line-height:.88;text-transform:uppercase}
+.hero-title sup{font-size:clamp(20px,4vw,52px);vertical-align:super;margin-left:8px;font-weight:400}
+.hero-pill{display:inline-block;padding:8px 22px;border:1px solid rgba(232,228,220,.5);border-radius:999px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-top:28px}
+.hero-services{position:absolute;top:80px;left:var(--px);z-index:5}
+.hero-services .metatag{margin-bottom:8px}
+.hero-services ul{font-family:var(--mono);font-size:12px;line-height:1.9}
+.hero-contact{position:absolute;top:80px;right:var(--px);z-index:5;text-align:right}
+.hero-contact .metatag{margin-bottom:8px}
+.hero-contact div{font-family:var(--mono);font-size:12px}
+@media(max-width:768px){.hero-services,.hero-contact{display:none}}
+.hero-bottom{position:absolute;left:0;right:0;bottom:80px;z-index:4;text-align:center}
+.hero-tagline{font-family:var(--serif);font-style:italic;font-size:clamp(18px,3vw,28px);font-weight:300;margin-bottom:14px}
+
+.corner{position:absolute;width:32px;height:32px;z-index:6}
+.corner--tl{top:24px;left:var(--px);border-top:1px solid var(--ink-0);border-left:1px solid var(--ink-0)}
+.corner--tr{top:24px;right:var(--px);border-top:1px solid var(--ink-0);border-right:1px solid var(--ink-0)}
+.corner--bl{bottom:28px;left:var(--px);border-bottom:1px solid var(--ink-0);border-left:1px solid var(--ink-0)}
+.corner--br{bottom:28px;right:var(--px);border-bottom:1px solid var(--ink-0);border-right:1px solid var(--ink-0)}
+
+/* CREED */
+.creed{padding:140px var(--px);border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+@media(max-width:768px){.creed{padding:80px var(--px)}}
+.creed-heading{font-family:var(--en);font-size:clamp(48px,10vw,120px);font-weight:700;letter-spacing:-.04em;line-height:.95;text-transform:uppercase}
+.creed-heading .outline{-webkit-text-stroke:1.5px var(--ink-0);color:transparent}
+.creed-heading .italic-accent{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:300;color:var(--accent)}
+.creed-sub{margin-top:48px;font-family:var(--ko);font-size:clamp(16px,2.5vw,22px);color:var(--ink-1);max-width:780px;margin-left:auto;margin-right:auto;line-height:1.75;word-break:keep-all}
+
+/* ORIGIN / ABOUT */
+.origin{padding:140px var(--px) 60px}
+@media(max-width:768px){.origin{padding:80px var(--px) 40px}}
+.origin-grid{display:grid;grid-template-columns:280px 1fr;gap:64px;align-items:start;max-width:var(--max-w);margin:0 auto}
+@media(max-width:768px){.origin-grid{grid-template-columns:1fr;gap:40px}}
+.origin-sidebar .chapter-list{font-family:var(--mono);font-size:12px;line-height:1.9;color:var(--ink-2)}
+.origin-sidebar .extra{margin-top:40px;padding-top:24px;border-top:1px solid rgba(232,228,220,.18)}
+.origin-heading{font-family:var(--en);font-weight:700;font-size:clamp(64px,12vw,180px);letter-spacing:-.05em;line-height:.86;text-transform:uppercase}
+.origin-heading .italic-accent{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:300;color:var(--accent)}
+.origin-body{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:56px}
+@media(max-width:768px){.origin-body{grid-template-columns:1fr;gap:24px}}
+.origin-body p{font-family:var(--ko);font-size:16px;line-height:1.75;color:var(--ink-1);word-break:keep-all}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;border:1px solid var(--border)}
+@media(max-width:768px){.stats-bar{grid-template-columns:repeat(2,1fr)}}
+.stat-cell{padding:24px 20px;border-right:1px solid var(--border)}
+.stat-cell:last-child{border-right:none}
+@media(max-width:768px){.stat-cell:nth-child(2){border-right:none}.stat-cell:nth-child(3),.stat-cell:nth-child(4){border-top:1px solid var(--border)}}
+.stat-val{font-family:var(--en);font-size:52px;font-weight:300;letter-spacing:-.03em;color:var(--accent);line-height:1}
+.stat-label{margin-top:10px}
+
+/* TIMELINE */
+.timeline-section{padding:60px var(--px) 120px;background:var(--bg-alt)}
+@media(max-width:768px){.timeline-section{padding:40px var(--px) 80px}}
+.timeline-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:60px;max-width:var(--max-w);margin-left:auto;margin-right:auto;flex-wrap:wrap;gap:24px}
+.timeline-title{font-family:var(--en);font-size:clamp(48px,8vw,96px);font-weight:700;letter-spacing:-.04em;line-height:.95;text-transform:uppercase}
+.timeline-vertical{max-width:var(--max-w);margin:0 auto;display:flex;flex-direction:column}
+.tl-entry{display:grid;grid-template-columns:180px 40px 1fr 1.6fr;gap:32px;padding:36px 0;border-top:1px solid rgba(232,228,220,.08);align-items:baseline}
+@media(max-width:768px){.tl-entry{grid-template-columns:80px 1fr;gap:20px;padding:24px 0}.tl-dot{display:none}.tl-desc{grid-column:span 1}}
+.tl-year{font-family:var(--en);font-size:48px;font-weight:300;letter-spacing:-.03em;line-height:1}
+.tl-dot{display:flex;justify-content:center;padding-top:8px}
+.tl-dot span{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px rgba(166,150,224,.6),0 0 0 4px rgba(166,150,224,.12)}
+.tl-title{font-family:var(--ko);font-size:20px;font-weight:400;margin-bottom:6px}
+.tl-title-en{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-2);text-transform:uppercase}
+.tl-desc{font-family:var(--ko);font-size:15px;line-height:1.7;color:var(--ink-1);word-break:keep-all;max-width:540px}
+
+/* ENGINES */
+.engines-section{padding:140px var(--px);border-top:1px solid var(--border)}
+@media(max-width:768px){.engines-section{padding:80px var(--px)}}
+.engines-heading{font-family:var(--en);font-weight:700;font-size:clamp(56px,12vw,180px);letter-spacing:-.05em;line-height:.88;text-transform:uppercase;margin-bottom:60px}
+.engines-heading .italic-accent{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:300;color:var(--accent)}
+
+/* Foundation cards — 3 column grid */
+.foundation-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:1024px){.foundation-grid{grid-template-columns:1fr}}
+.foundation-card{border:1px solid rgba(166,150,224,.25);padding:40px 36px 36px;display:flex;flex-direction:column;min-height:380px;transition:border-color .3s}
+.foundation-card:hover{border-color:var(--accent)}
+.foundation-card .f-num{font-family:var(--en);font-size:clamp(56px,8vw,80px);font-weight:700;letter-spacing:-.04em;line-height:.85;-webkit-text-stroke:1.5px var(--ink-0);color:transparent}
+.foundation-card .f-city{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--accent);text-transform:uppercase}
+.foundation-card .f-name{font-family:var(--en);font-size:clamp(28px,4vw,36px);font-weight:700;letter-spacing:-.03em;text-transform:uppercase;line-height:1;margin-top:28px}
+.foundation-card .f-sub{font-family:var(--ko);font-size:13px;color:var(--ink-2);margin-top:8px}
+.foundation-card .f-body{font-family:var(--ko);font-size:14px;line-height:1.7;color:var(--ink-1);word-break:keep-all;margin-top:20px;flex:1}
+.foundation-card .f-bottom{}
+.foundation-card .f-tagline{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--accent);line-height:1.4;padding-top:20px}
+.foundation-card .f-stats{padding-top:16px;border-top:1px solid rgba(232,228,220,.1)}
+.f-stat{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted rgba(232,228,220,.12);padding:8px 0;min-height:40px;font-family:var(--mono)}
+.f-stat .val{font-size:16px;color:var(--ink-0)}
+.f-stat .lbl{font-size:10px;color:var(--ink-2);letter-spacing:.08em;text-transform:uppercase}
+
+/* Convergence divider */
+.convergence{text-align:center;padding:60px 0 48px;position:relative}
+.convergence::before{content:"";position:absolute;top:0;left:50%;width:1px;height:28px;background:linear-gradient(180deg,transparent,var(--accent))}
+.convergence-text{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--accent);text-transform:uppercase}
+.convergence::after{content:"";position:absolute;bottom:0;left:50%;width:1px;height:28px;background:linear-gradient(180deg,var(--accent),transparent)}
+
+/* Stage card — full width, accent border */
+.stage-card{border:1px solid var(--accent);padding:48px;display:grid;grid-template-columns:auto 1fr 1fr 280px;gap:48px;align-items:start;background:rgba(166,150,224,.02)}
+@media(max-width:1024px){.stage-card{grid-template-columns:1fr;gap:24px;padding:32px 24px}}
+.stage-num{font-family:var(--en);font-size:clamp(56px,8vw,108px);font-weight:700;letter-spacing:-.04em;line-height:.85;-webkit-text-stroke:2px var(--accent);color:transparent}
+.stage-name{font-family:var(--en);font-size:clamp(32px,5vw,48px);font-weight:700;letter-spacing:-.03em;text-transform:uppercase;line-height:1}
+.stage-sub{font-family:var(--ko);font-size:14px;color:var(--ink-2);margin-top:8px}
+.stage-body{font-family:var(--ko);font-size:16px;line-height:1.75;color:var(--ink-1);word-break:keep-all}
+.stage-tagline{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--accent);line-height:1.4;margin-top:20px}
+.stage-stats{display:flex;flex-direction:column;gap:8px}
+.stage-stat{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted rgba(166,150,224,.3);padding-bottom:6px;font-family:var(--mono)}
+.stage-stat .val{font-size:20px;color:var(--accent)}
+.stage-stat .lbl{font-size:11px;color:var(--ink-2);letter-spacing:.08em;text-transform:uppercase}
+
+/* Legacy engine-row styles kept for compatibility */
+.engine-row{padding:40px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:120px 320px 1fr 280px;gap:40px;align-items:start}
+@media(max-width:1024px){.engine-row{grid-template-columns:1fr;gap:20px}}
+
+/* FLAGSHIP */
+.flagship-section{padding:140px var(--px);background:var(--bg-alt);border-top:1px solid var(--border)}
+@media(max-width:768px){.flagship-section{padding:80px var(--px)}}
+.flagship-meta-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:36px;flex-wrap:wrap;gap:12px}
+.flagship-title{font-family:var(--en);font-size:clamp(48px,15vw,220px);font-weight:700;letter-spacing:-.055em;line-height:.86;text-transform:uppercase}
+.flagship-title .outline{-webkit-text-stroke:2px var(--ink-0);color:transparent}
+.flagship-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px}
+@media(max-width:768px){.flagship-grid{grid-template-columns:1fr;gap:40px}}
+.flagship-quote{font-family:var(--serif);font-style:italic;font-size:clamp(24px,4vw,48px);font-weight:300;line-height:1.1;margin-bottom:28px}
+.flagship-desc{font-family:var(--ko);font-size:17px;line-height:1.75;color:var(--ink-1);max-width:560px;word-break:keep-all}
+.flagship-emphasis{color:var(--accent);font-style:normal}
+.track-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1px solid var(--border);margin-top:40px}
+.track-cell{padding:20px 16px;border-right:1px solid var(--border)}
+.track-cell:last-child{border-right:none}
+.track-letter{font-family:var(--en);font-size:32px;font-weight:700;color:var(--accent)}
+.flagship-images{display:flex;flex-direction:column;gap:16px}
+.flagship-sub-images{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+
+/* CONTACT */
+.contact-section{padding:160px var(--px) 80px;text-align:center;border-top:1px solid var(--border)}
+@media(max-width:768px){.contact-section{padding:80px var(--px) 60px}}
+.contact-heading{font-family:var(--en);font-size:clamp(48px,18vw,260px);font-weight:700;letter-spacing:-.055em;line-height:.85;text-transform:uppercase}
+.contact-heading .italic-accent{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:300;color:var(--accent)}
+.contact-ctas{margin-top:56px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
+.cta-primary{padding:18px 36px;border:1px solid var(--ink-0);background:var(--ink-0);color:var(--bg);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;display:inline-block;transition:all .2s}
+.cta-primary:hover{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.cta-secondary{padding:18px 36px;border:1px solid rgba(232,228,220,.4);color:var(--ink-0);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;display:inline-block;transition:all .2s}
+.cta-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.contact-grid{margin-top:60px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;max-width:1100px;margin-left:auto;margin-right:auto;text-align:left;border:1px solid var(--border)}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr}}
+.contact-cell{padding:28px 24px;border-right:1px solid var(--border)}
+.contact-cell:last-child{border-right:none}
+@media(max-width:768px){.contact-cell{border-right:none;border-bottom:1px solid var(--border)}.contact-cell:last-child{border-bottom:none}}
+.contact-cell-label{color:var(--accent);margin-bottom:12px}
+
+/* FOOTER */
+.footer{padding:48px var(--px);border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:center}
+@media(max-width:768px){.footer{grid-template-columns:1fr;text-align:center;gap:20px}}
+.footer-logo{font-family:var(--en);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.footer-nav{display:flex;justify-content:center;gap:24px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.footer-nav a:hover{color:var(--accent)}
+.footer-right{text-align:right;font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.06em}
+@media(max-width:768px){.footer-right{text-align:center}}
+
+/* Inline grid responsive overrides */
+.eco-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+@media(max-width:768px){.eco-grid{grid-template-columns:1fr;gap:40px}}
+.track-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:768px){.track-cards{grid-template-columns:1fr}}
+.flagship-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+@media(max-width:768px){.flagship-detail-grid{grid-template-columns:1fr}}
+
+/* ── Mobile responsive additions ── */
+
+/* ECO diagram wrapper */
+.eco-diagram-wrap{position:relative;width:100%;max-width:480px;margin:0 auto;padding:48px 40px}
+@media(max-width:768px){.eco-diagram-wrap{padding:40px 28px}}
+
+/* ECO diagram labels */
+.eco-label-top{position:absolute;top:0;left:50%;transform:translateX(-50%);text-align:center}
+.eco-label-right{position:absolute;top:50%;right:-32px;transform:translateY(-50%);text-align:center}
+.eco-label-bottom{position:absolute;bottom:0;left:50%;transform:translateX(-50%);text-align:center}
+.eco-label-left{position:absolute;top:50%;left:-32px;transform:translateY(-50%);text-align:center}
+@media(max-width:768px){
+  .eco-label-right{right:-44px}
+  .eco-label-left{left:-44px}
+  .eco-label-right .eco-label-name,
+  .eco-label-left .eco-label-name{font-size:12px}
+}
+
+/* ECO right panel: 자금/운영/기획 */
+.eco-reasons{display:flex;flex-direction:column;gap:18px}
+
+/* Business Tracks section */
+.business-tracks-section{padding:100px var(--px);background:var(--bg-alt);border-top:1px solid var(--border)}
+@media(max-width:768px){.business-tracks-section{padding:60px var(--px)}}
+
+/* Vision section */
+.vision-section{padding:160px var(--px);border-top:1px solid var(--border);text-align:center}
+@media(max-width:768px){.vision-section{padding:80px var(--px)}}
+
+/* Flagship main image */
+.flagship-main-img{width:100%;height:460px;position:relative;overflow:hidden}
+@media(max-width:768px){.flagship-main-img{height:260px}}
+
+/* Why Now responsive */
+@media(max-width:768px){.why-now-grid{grid-template-columns:1fr !important}}
+
+/* Hero services hover */
+.hero-services a:hover{color:var(--accent) !important}
+
+/* Contact modal */
+.contact-modal-inner{background:var(--bg);border:1px solid var(--border);max-width:480px;width:90%;padding:40px;position:relative}
+@media(max-width:768px){.contact-modal-inner{padding:24px 20px;width:94%}}
+</style>
+</head>
+<body>
+
+<!-- SCROLL NAV — hidden, appears on scroll -->
+<nav class="nav" id="scrollNav">
+  <a href="#hero" class="nav-logo" onclick="event.preventDefault();window.scrollTo({top:0,behavior:'smooth'})"><img src="img/logo-white.png" alt="Birch Sound"></a>
+  <div class="nav-links" id="navLinks">
+    <a href="#about">About</a>
+    <a href="#business">Business</a>
+    <a href="#flagship">Flagship</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="lang-toggle" id="langToggle">KO / EN</button>
+    <div class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero noise" id="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1800&q=80&auto=format&fit=crop" alt="Live concert crowd" style="width:100%;height:100%;object-fit:cover">
+  </div>
+  <div class="hero-overlay"></div>
+
+  <!-- TOPBAR: logo / nav links / lang toggle -->
+  <div class="hero-topbar">
+    <div>[&ensp;BY&ensp;]&ensp;BIRCH SOUND &copy;</div>
+    <div style="text-align:center" class="hero-topbar-nav">
+      <a href="#about">ABOUT</a>
+      <a href="#business">BUSINESS</a>
+      <a href="#flagship">FLAGSHIP</a>
+      <a href="#contact">CONTACT</a>
+    </div>
+    <div style="text-align:right"><span class="hero-topbar-lang" id="heroLangToggle">[ KO / EN ]</span></div>
+  </div>
+
+  <!-- SERVICES — with anchor links -->
+  <div class="hero-services">
+    <div class="metatag">[ SERVICES ]</div>
+    <ul>
+      <li><a href="#engine-content" style="color:var(--ink-0);text-decoration:none">[ 01 ] Content</a></li>
+      <li><a href="#engine-capital" style="color:var(--ink-0);text-decoration:none">[ 02 ] Capital</a></li>
+      <li><a href="#engine-technology" style="color:var(--ink-0);text-decoration:none">[ 03 ] Technology</a></li>
+      <li><a href="#engine-live" style="color:var(--ink-0);text-decoration:none">[ 04 ] Live IP</a></li>
+    </ul>
+  </div>
+
+  <div class="hero-contact">
+    <div class="metatag">[ CONTACT ]</div>
+    <div>biz@birchsound.net</div>
+    <div style="color:var(--ink-2);margin-top:4px">+82 &middot; 2 &middot; 548 &middot; 9300</div>
+  </div>
+
+  <div class="hero-title-block">
+    <h1 class="hero-title">BIRCH SOUND INC.</h1>
+    <div><span class="hero-pill">&mdash; Built for Live &mdash;</span></div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-tagline">Ten years of content, capital, and technology. All converging on one stage.</div>
+    <div class="metatag">[ Singapore &middot; Seoul &middot; Hong Kong &middot; est. 2015 ]</div>
+  </div>
+
+</section>
+
+<!-- CREED -->
+<section class="creed fade-up" id="creed">
+  <div class="metatag" style="margin-bottom:28px">[ CREED ]</div>
+  <div class="creed-heading">
+    WE DON'T<br>
+    <span class="outline">FOLLOW</span> LINES.<br>
+    WE FOLLOW <span class="italic-accent">signals.</span>
+  </div>
+  <div class="creed-sub i18n-html"
+    data-ko="버치사운드는 콘텐츠를 만드는 회사가 아닙니다.<br>지난 10년 동안 우리는 콘텐츠와 자본, 기술이라는 세 가지 토대를 갖추었습니다.<br>이 모든 것은 단 하나의 목적지를 향합니다 &mdash; 라이브 엔터테인먼트."
+    data-en="Birch Sound is not a content company.<br>For ten years, we've built three foundations &mdash;<br>content, capital, and technology.<br>They lead to one place. Live entertainment.">
+    버치사운드는 콘텐츠를 만드는 회사가 아닙니다.<br>
+    지난 10년 동안 우리는 콘텐츠와 자본, 기술이라는 세 가지 토대를 갖추었습니다.<br>
+    이 모든 것은 단 하나의 목적지를 향합니다 &mdash; 라이브 엔터테인먼트.
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="origin fade-up" id="about">
+  <div class="origin-grid">
+    <div class="origin-sidebar">
+      <div class="metatag">[ 001 &middot; ABOUT US ]</div>
+      <div class="chapter-list" style="margin-top:16px">
+        <div>[ 01 ] Content</div>
+        <div>[ 02 ] Capital</div>
+        <div>[ 03 ] Technology</div>
+        <div>[ 04 ] Live IP</div>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="origin-heading">WHERE<br>IT <span class="italic-accent">started.</span></h2>
+      <div class="origin-body">
+        <p class="i18n"
+          data-ko="콘텐츠를 만드는 것은 알고 있었습니다. 그러나 만드는 것만으로는 부족하다는 것도 알게 되었습니다."
+          data-en="We knew how to make content. We learned that making it wasn't enough.">콘텐츠를 만드는 것은 알고 있었습니다. 그러나 만드는 것만으로는 부족하다는 것도 알게 되었습니다.</p>
+        <p class="i18n"
+          data-ko="콘텐츠가 살아 숨 쉬려면 자본이 필요했고, 자본이 작동하려면 기술이 필요했습니다. 10년 동안 이 셋을 모두 갖추었고, 이제 우리는 라이브의 시간으로 들어섭니다."
+          data-en="Content needs capital to breathe. Capital needs technology to move. Ten years in, we have all three. Now we step into the era of live.">콘텐츠가 살아 숨 쉬려면 자본이 필요했고, 자본이 작동하려면 기술이 필요했습니다. 10년 동안 이 셋을 모두 갖추었고, 이제 우리는 라이브의 시간으로 들어섭니다.</p>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-cell">
+          <div class="stat-val" data-count="500" data-suffix="+">0</div>
+          <div class="metatag stat-label">Episodes produced</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val" data-count="10">0</div>
+          <div class="metatag stat-label">Years of content</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val" data-count="6">0</div>
+          <div class="metatag stat-label">Countries distributed</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val" data-count="4">0</div>
+          <div class="metatag stat-label">Engines today</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section fade-up" id="timeline">
+  <div class="timeline-header">
+    <div>
+      <div class="metatag" style="margin-bottom:14px">[ 002 &middot; TIMELINE ]</div>
+      <h2 class="timeline-title">SIGNAL LOG<br>2015 / 2027</h2>
+    </div>
+  </div>
+
+  <div class="timeline-vertical">
+    <div class="tl-entry fade-up">
+      <div class="tl-year">2015</div>
+      <div class="tl-dot"><span></span></div>
+      <div>
+        <div class="tl-title i18n" data-ko="AKATV 설립" data-en="AKATV Founded">AKATV 설립</div>
+        <div class="tl-title-en">Foundation 01 — Content begins</div>
+      </div>
+      <div class="tl-desc i18n" data-ko="한국 방송 제작 현장에서 출발. 프로듀스 101 시즌2·48, 쇼미더머니, MBC·JTBC·M.net 히트 프로그램 외주 제작." data-en="Launched from Korean broadcast. Produce 101 S2·48, Show Me the Money, MBC·JTBC·M.net hit program production.">한국 방송 제작 현장에서 출발. 프로듀스 101 시즌2&middot;48, 쇼미더머니, MBC&middot;JTBC&middot;M.net 히트 프로그램 외주 제작.</div>
+    </div>
+    <div class="tl-entry fade-up">
+      <div class="tl-year">2016</div>
+      <div class="tl-dot"><span></span></div>
+      <div>
+        <div class="tl-title i18n" data-ko="디지털 플랫폼 확장" data-en="Digital Platform Expansion">디지털 플랫폼 확장</div>
+        <div class="tl-title-en">Content scales</div>
+      </div>
+      <div class="tl-desc i18n" data-ko="YouTube·Naver TV·Amazon Prime·iQIYI 글로벌 유통 인프라 구축. 네이버TV 웹예능 유통지원작 2016–2017 연속 선정." data-en="YouTube·Naver TV·Amazon Prime·iQIYI global distribution. Selected for Naver TV web entertainment distribution support 2016–2017.">YouTube&middot;Naver TV&middot;Amazon Prime&middot;iQIYI 글로벌 유통 인프라 구축. 네이버TV 웹예능 유통지원작 2016&ndash;2017 연속 선정.</div>
+    </div>
+    <div class="tl-entry fade-up">
+      <div class="tl-year">2019</div>
+      <div class="tl-dot"><span></span></div>
+      <div>
+        <div class="tl-title i18n" data-ko="오디오 인텔리전스" data-en="Audio Intelligence">오디오 인텔리전스</div>
+        <div class="tl-title-en">Foundation 02 &mdash; Technology begins</div>
+        <a href="https://www.art19.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border:1px solid var(--accent);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;transition:all .2s" onmouseover="this.style.background='var(--accent)';this.style.color='var(--bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">with ART19 (Amazon) &nearr;</a>
+      </div>
+      <div class="tl-desc i18n" data-ko="팟캐스트를 단순 콘텐츠가 아닌 데이터 인텔리전스 플랫폼으로 접근. 오디오 광고 테크 및 청취자 행동 분석 시스템을 한국시장에 확산." data-en="Approached podcast as data intelligence platform, not just content. Expanded audio ad tech and listener behavior analytics in the Korean market.">팟캐스트를 단순 콘텐츠가 아닌 데이터 인텔리전스 플랫폼으로 접근. 오디오 광고 테크 및 청취자 행동 분석 시스템을 한국시장에 확산.</div>
+    </div>
+    <div class="tl-entry fade-up">
+      <div class="tl-year">2023</div>
+      <div class="tl-dot"><span></span></div>
+      <div>
+        <div class="tl-title i18n" data-ko="AI 버추얼 기술" data-en="AI Virtual Tech">AI 버추얼 기술</div>
+        <div class="tl-title-en">Technology completes</div>
+      </div>
+      <div class="tl-desc i18n" data-ko="AI 이미지 생성, LiDAR 센서 기반 인터랙티브 기술 등 AI 기반 공간 스토리텔링 기술 개발." data-en="AI image generation, LiDAR-based interactive tech — AI-powered spatial storytelling development.">AI 이미지 생성, LiDAR 센서 기반 인터랙티브 기술 등 AI 기반 공간 스토리텔링 기술 개발.</div>
+    </div>
+    <div class="tl-entry fade-up">
+      <div class="tl-year">2024</div>
+      <div class="tl-dot"><span></span></div>
+      <div>
+        <div class="tl-title i18n" data-ko="Birch Sound 브랜드 진화" data-en="Brand Evolution">Birch Sound 브랜드 진화</div>
+        <div class="tl-title-en">Three foundations integrate</div>
+      </div>
+      <div class="tl-desc i18n" data-ko="AKATV에서 Birch Sound로 브랜드 진화. 콘텐츠·오디오·AI 버추얼 기술을 통합하고 새로운 엔터테인먼트 사업의 문을 열다." data-en="Brand evolution from AKATV to Birch Sound. Unifying content, audio, and AI virtual tech to open a new chapter in entertainment.">AKATV에서 Birch Sound로 브랜드 진화. 콘텐츠&middot;오디오&middot;AI 버추얼 기술을 통합하고 새로운 엔터테인먼트 사업의 문을 열다.</div>
+    </div>
+    <div class="tl-entry fade-up">
+      <div class="tl-year">2025</div>
+      <div class="tl-dot"><span></span></div>
+      <div>
+        <div class="tl-title i18n" data-ko="라이브 엔터테인먼트 펀드 설정" data-en="Live Entertainment Fund">라이브 엔터테인먼트 펀드 설정</div>
+        <div class="tl-title-en">Foundation 03 — Capital</div>
+      </div>
+      <div class="tl-desc i18n" data-ko="라이브 IP의 안정적 출범을 위한 엔터테인먼트 전문 투자 플랫폼 론칭." data-en="Entertainment-dedicated investment platform launched to support the stable launch of live IP.">라이브 IP의 안정적 출범을 위한 엔터테인먼트 전문 투자 플랫폼 론칭.</div>
+    </div>
+    <div class="tl-entry fade-up">
+      <div class="tl-year">2026</div>
+      <div class="tl-dot"><span></span></div>
+      <div>
+        <div class="tl-title i18n" data-ko="토대 완성. 라이브 IP 진입." data-en="Foundations Complete">토대 완성. 라이브 IP 진입.</div>
+        <div class="tl-title-en">IP Licensing / Media Art &amp; Tech Exhibition</div>
+      </div>
+      <div class="tl-desc i18n" data-ko="3개 토대가 완성되고, IP 라이선싱과 미디어아트 &amp; 테크놀로지 전시 사업 개시." data-en="Three foundations complete. IP Licensing and Media Art &amp; Technology Exhibition begin.">3개 토대가 완성되고, IP 라이선싱과 미디어아트 &amp; 테크놀로지 전시 사업 개시.</div>
+    </div>
+    <div class="tl-entry fade-up">
+      <div class="tl-year">2027</div>
+      <div class="tl-dot"><span></span></div>
+      <div>
+        <div class="tl-title i18n" data-ko="수렴. 아시아 플래그십, 5월." data-en="Convergence">수렴. 아시아 플래그십, 5월.</div>
+        <div class="tl-title-en">Direct Tour</div>
+      </div>
+      <div class="tl-desc i18n" data-ko="콘텐츠&middot;자본&middot;기술 &mdash; 10년의 축적이 싱가포르 플래그십에서 하나로." data-en="Content, capital, technology &mdash; ten years converge at the Singapore Flagship.">콘텐츠&middot;자본&middot;기술 &mdash; 10년의 축적이 싱가포르 플래그십에서 하나로.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUR ENGINES -->
+<section class="engines-section fade-up" id="business">
+  <div class="content-max">
+    <div class="metatag" style="margin-bottom:14px">[ 003 &middot; BUSINESS ]</div>
+    <h2 class="engines-heading">THREE<br>FOUNDATIONS.<br><span class="italic-accent">one stage.</span></h2>
+    <p style="font-family:var(--ko);font-size:16px;line-height:1.75;color:var(--ink-1);max-width:var(--body-max);margin-bottom:60px;word-break:keep-all" class="i18n"
+      data-ko="콘텐츠, 자본, 기술 &mdash; 세 개의 토대가 단 하나의 무대로 수렴합니다."
+      data-en="Content, capital, technology &mdash; three foundations converging on one stage.">콘텐츠, 자본, 기술 &mdash; 세 개의 토대가 단 하나의 무대로 수렴합니다.</p>
+
+    <!-- Foundations: 3 cards -->
+    <div style="margin-bottom:16px"><span class="metatag" style="color:var(--accent)">[ FOUNDATIONS ]</span></div>
+    <div class="foundation-grid">
+
+      <!-- 01 Content -->
+      <article class="foundation-card" id="engine-content">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <span class="f-num">01</span>
+          <span class="f-city">Seoul</span>
+        </div>
+        <div class="f-name">Content</div>
+        <div class="f-sub">Birch Sound Seoul</div>
+        <div class="f-body i18n"
+          data-ko="10년의 제작&middot;유통 레거시. 지상파&middot;종편&middot;케이블 외주 제작, 웹 오리지널 IP 개발, 그리고 국내외 멀티플랫폼 유통."
+          data-en="A decade of stories, ready for the stage. Production. Distribution. IP.">10년의 제작&middot;유통 레거시. 지상파&middot;종편&middot;케이블 외주 제작, 웹 오리지널 IP 개발, 그리고 국내외 멀티플랫폼 유통.</div>
+        <div class="f-bottom">
+          <div class="f-stats">
+            <div class="f-stat"><span class="val">10+</span><span class="lbl">years</span></div>
+            <div class="f-stat"><span class="val">6</span><span class="lbl">countries</span></div>
+            <div class="f-stat"><span class="val">500+</span><span class="lbl">episodes</span></div>
+            <a href="portfolio.html" style="display:block;margin-top:12px;padding:10px 16px;border:1px solid var(--accent);text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;transition:all .2s"
+              onmouseover="this.style.background='var(--accent)';this.style.color='var(--bg)'"
+              onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">VIEW PORTFOLIO &rarr;</a>
+          </div>
+          <div class="f-tagline">A decade of stories, ready for the stage.</div>
+        </div>
+      </article>
+
+      <!-- 02 Capital -->
+      <article class="foundation-card" id="engine-capital">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <span class="f-num">02</span>
+          <span class="f-city">Singapore</span>
+        </div>
+        <div class="f-name">Capital</div>
+        <div class="f-sub">Birch Sound Singapore</div>
+        <div class="f-body i18n"
+          data-ko="라이브 IP의 안정적 출범을 위한 자본 레이어. 엔터테인먼트 전문 투자 인프라."
+          data-en="Smart money built to launch live IP. An entertainment-dedicated investment platform inside the ecosystem.">라이브 IP의 안정적 출범을 위한 자본 레이어. 엔터테인먼트 전문 투자 인프라.</div>
+        <div class="f-bottom">
+          <div class="f-stats">
+            <div class="f-stat"><span class="val">Content IP</span><span class="lbl">Fund</span></div>
+            <div class="f-stat"><span class="val">Live</span><span class="lbl">Fund</span></div>
+            <div class="f-stat"><span class="val">EnterTech</span><span class="lbl">Fund</span></div>
+            <a href="https://www.basisamhk.com/" target="_blank" rel="noopener" style="display:block;margin-top:12px;padding:10px 16px;border:1px solid var(--accent);text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;transition:all .2s"
+              onmouseover="this.style.background='var(--accent)';this.style.color='var(--bg)'"
+              onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">VISIT BASIS &rarr;</a>
+          </div>
+          <div class="f-tagline">Smart money built to launch live IP.</div>
+        </div>
+      </article>
+
+      <!-- 03 Technology -->
+      <article class="foundation-card" id="engine-technology">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <span class="f-num">03</span>
+          <span class="f-city">Hong Kong</span>
+        </div>
+        <div class="f-name">Technology</div>
+        <div class="f-sub">Birch Sound Hong Kong</div>
+        <div class="f-body i18n"
+          data-ko="오디오 인텔리전스와 AI 버추얼 &mdash; 라이브를 살아있는 세계로 만드는 두 개의 기술 축."
+          data-en="Two technical layers that make live a living world. Audio intelligence. AI virtual.">오디오 인텔리전스와 AI 버추얼 &mdash; 라이브를 살아있는 세계로 만드는 두 개의 기술 축.</div>
+        <div class="f-bottom">
+          <div class="f-stats">
+            <div class="f-stat"><span class="val">2</span><span class="lbl">layers</span></div>
+            <div class="f-stat"><span class="val">100+</span><span class="lbl">VFX titles</span></div>
+            <div class="f-stat"><span class="val">Live</span><span class="lbl">AI sync</span></div>
+            <a href="https://www.art19.com/" target="_blank" rel="noopener" style="display:block;margin-top:12px;padding:10px 16px;border:1px solid var(--accent);text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;transition:all .2s"
+              onmouseover="this.style.background='var(--accent)';this.style.color='var(--bg)'"
+              onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">WITH ART19 (AMAZON) &nearr;</a>
+          </div>
+          <div class="f-tagline" style="font-size:13px">Two technical layers that make live a living world.</div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Convergence divider -->
+    <div class="convergence">
+      <div class="convergence-text">&darr;&ensp;CONVERGING ON&ensp;&darr;</div>
+    </div>
+
+    <!-- 04 Live IP — THE STAGE -->
+    <div style="margin-bottom:12px"><span class="metatag" style="color:var(--accent)">[ THE STAGE ]</span></div>
+    <div class="stage-card" id="engine-live">
+      <div class="stage-num">04</div>
+      <div>
+        <div class="stage-name">Live IP</div>
+        <div class="stage-sub">Flagship Festival &middot; APAC Multi-City</div>
+        <div class="metatag" style="color:var(--accent);margin-top:10px">[ FESTIVAL &amp; EXHIBITION ]</div>
+      </div>
+      <div>
+        <div class="stage-body i18n"
+          data-ko="십 년의 모든 축적이 만나는 단 하나의 무대. 경험하지 않으면 설명할 수 없는 무대."
+          data-en="Where ten years converge. The stage you can't explain without being there.">십 년의 모든 축적이 만나는 단 하나의 무대. 경험하지 않으면 설명할 수 없는 무대.</div>
+        <div class="stage-tagline">Where ten years converge.</div>
+      </div>
+      <div class="stage-stats">
+        <div class="stage-stat"><span class="val">May 27</span><span class="lbl">launch</span></div>
+        <div class="stage-stat"><span class="val">SGP</span><span class="lbl">flagship</span></div>
+        <div class="stage-stat"><span class="val">APAC</span><span class="lbl">tour</span></div>
+      </div>
+    </div>
+
+    <!-- Ecosystem cycle — circular diagram -->
+    <div style="margin-top:80px;padding-top:60px;border-top:1px solid var(--border)">
+      <div class="eco-grid">
+        <!-- SVG Diagram — 3 foundations converge to 1 stage -->
+        <div class="eco-diagram-wrap">
+          <svg viewBox="0 0 480 480" style="width:100%;height:auto">
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <style>
+              @keyframes eco-pulse{0%,100%{opacity:.3;r:15}50%{opacity:.6;r:18}}
+              @keyframes eco-glow{0%,100%{opacity:.6}50%{opacity:1}}
+              @keyframes eco-flow{0%{stroke-dashoffset:40}100%{stroke-dashoffset:0}}
+              .eco-node-glow{animation:eco-pulse 3s ease-in-out infinite}
+              .eco-node-core{animation:eco-glow 3s ease-in-out infinite;filter:url(#glow)}
+              .eco-flow-line{stroke-dasharray:8 4;animation:eco-flow 2s linear infinite}
+            </style>
+            <!-- Top 3 nodes -->
+            <!-- Content node -->
+            <circle class="eco-node-glow" cx="100" cy="100" r="15" fill="none" stroke="#a696e0" stroke-opacity=".3"/>
+            <circle class="eco-node-core" cx="100" cy="100" r="8" fill="#a696e0"/>
+            <text x="100" y="60" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="300" fill="#faf8f4">Content</text>
+            <text x="100" y="45" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#a696e0">01</text>
+            <!-- Capital node -->
+            <circle class="eco-node-glow" cx="240" cy="100" r="15" fill="none" stroke="#a696e0" stroke-opacity=".3" style="animation-delay:.5s"/>
+            <circle class="eco-node-core" cx="240" cy="100" r="8" fill="#a696e0" style="animation-delay:.5s"/>
+            <text x="240" y="60" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="300" fill="#faf8f4">Capital</text>
+            <text x="240" y="45" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#a696e0">02</text>
+            <!-- Technology node -->
+            <circle class="eco-node-glow" cx="380" cy="100" r="15" fill="none" stroke="#a696e0" stroke-opacity=".3" style="animation-delay:1s"/>
+            <circle class="eco-node-core" cx="380" cy="100" r="8" fill="#a696e0" style="animation-delay:1s"/>
+            <text x="380" y="60" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="300" fill="#faf8f4">Technology</text>
+            <text x="380" y="45" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="10" fill="#a696e0">03</text>
+            <!-- Flow lines from 3 nodes to bottom center -->
+            <line class="eco-flow-line" x1="100" y1="118" x2="240" y2="330" stroke="#a696e0" stroke-opacity=".4" stroke-width="1"/>
+            <line class="eco-flow-line" x1="240" y1="118" x2="240" y2="330" stroke="#a696e0" stroke-opacity=".4" stroke-width="1" style="animation-delay:.3s"/>
+            <line class="eco-flow-line" x1="380" y1="118" x2="240" y2="330" stroke="#a696e0" stroke-opacity=".4" stroke-width="1" style="animation-delay:.6s"/>
+            <!-- Arrows on lines -->
+            <text x="165" y="230" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#a696e0" opacity=".6">&darr;</text>
+            <text x="240" y="230" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#a696e0" opacity=".6">&darr;</text>
+            <text x="315" y="230" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#a696e0" opacity=".6">&darr;</text>
+            <!-- Bottom center: Live IP (large node) -->
+            <circle cx="240" cy="360" r="36" fill="none" stroke="rgba(232,228,220,.08)" stroke-width="1"/>
+            <circle cx="240" cy="360" r="28" fill="none" stroke="rgba(166,150,224,.25)" stroke-width="1" stroke-dasharray="3 6"/>
+            <circle class="eco-node-glow" cx="240" cy="360" r="20" fill="none" stroke="#a696e0" stroke-opacity=".3" style="animation-delay:1.5s"/>
+            <circle class="eco-node-core" cx="240" cy="360" r="12" fill="#a696e0" style="animation-delay:1.5s"/>
+            <text x="240" y="415" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#faf8f4" letter-spacing="-0.5">Live IP</text>
+            <text x="240" y="435" text-anchor="middle" font-family="'Cormorant Garamond',Georgia,serif" font-style="italic" font-size="16" font-weight="300" fill="#a696e0">One Stage.</text>
+          </svg>
+        </div>
+
+        <!-- Right: why we won't fail -->
+        <div>
+          <div style="font-family:var(--serif);font-style:italic;font-size:clamp(22px,3vw,32px);line-height:1.3;color:var(--ink-0);margin-bottom:32px;word-break:keep-all">
+            <span class="i18n" data-ko="관성 없이 시작하기에, 더 나은 방법을 선택할 수 있습니다." data-en="Starting with zero legacy means we choose the best way, not the usual way.">관성 없이 시작하기에, 더 나은 방법을 선택할 수 있습니다.</span><br>
+            <span style="color:var(--accent)" class="i18n" data-ko="그것이 우리의 강점입니다." data-en="And that is exactly our edge.">그것이 우리의 강점입니다.</span>
+          </div>
+          <div class="eco-reasons">
+            <div style="padding-bottom:18px;border-bottom:1px solid var(--border)">
+              <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:6px">[ 자금 ]</div>
+              <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+                data-ko="Basis의 라이브 엔터테인먼트 펀드가 안정적 선투자 구조를 구현합니다."
+                data-en="Basis Live Entertainment Fund provides stable pre-investment structure.">Basis의 라이브 엔터테인먼트 펀드가 안정적 선투자 구조를 구현합니다.</div>
+            </div>
+            <div style="padding-bottom:18px;border-bottom:1px solid var(--border)">
+              <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:6px">[ 운영 ]</div>
+              <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+                data-ko="아시아 12개 시장 투어 운영 경험을 가진 전략적 파트너와 협력합니다."
+                data-en="Strategic partnership with a world-class group with touring experience across 12+ Asian markets.">아시아 12개 시장 투어 운영 경험을 가진 전략적 파트너와 협력합니다.</div>
+            </div>
+            <div>
+              <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:6px">[ 기획 ]</div>
+              <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+                data-ko="글로벌 공연 투어 설계자를 내부화. 관성 없이 시작한다는 것은 더 나은 방법을 선택할 수 있다는 뜻입니다."
+                data-en="Internalized global tour architects. Starting with zero legacy means choosing better methods.">글로벌 공연 투어 설계자를 내부화. 관성 없이 시작한다는 것은 더 나은 방법을 선택할 수 있다는 뜻입니다.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRACK A/B/C — Business Tracks -->
+<section class="business-tracks-section fade-up">
+  <div class="content-max">
+    <div class="metatag" style="margin-bottom:14px">[ 004 &middot; BUSINESS TRACKS ]</div>
+    <div style="font-family:var(--ko);font-size:16px;line-height:1.75;color:var(--ink-1);max-width:var(--body-max);margin-bottom:40px;word-break:keep-all" class="i18n"
+      data-ko="Flagship Festival은 '보여주는 무대'가 아니라 '함께 호흡하는 시간'입니다. 관객의 호흡(Breath out)이 곧 작품이 되는 &mdash; Play Based Music Culture."
+      data-en="Flagship Festival is not a stage to watch. It is a moment to breathe with. The audience's breath &mdash; RAUKH &mdash; becomes the work itself.">Flagship Festival은 '보여주는 무대'가 아니라 '함께 호흡하는 시간'입니다. 관객의 호흡(Breath out)이 곧 작품이 되는 &mdash; Play Based Music Culture.</div>
+    <h2 style="font-family:var(--en);font-weight:700;font-size:clamp(48px,8vw,120px);letter-spacing:-.04em;line-height:.92;text-transform:uppercase;margin-bottom:48px">PLAY BASED<br><span style="font-family:var(--serif);font-style:italic;font-weight:300;color:var(--accent);text-transform:none">music culture.</span></h2>
+
+    <div class="track-cards">
+      <div style="position:relative;overflow:hidden;border:1px solid var(--border)">
+        <div style="height:240px;overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=600&q=80&auto=format&fit=crop" alt="Festival stage" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.6)">
+        </div>
+        <div style="padding:24px">
+          <div class="metatag" style="color:var(--accent);margin-bottom:8px">Track A</div>
+          <div style="font-family:var(--en);font-size:24px;font-weight:700;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:12px">Direct Tour</div>
+          <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+            data-ko="버치사운드가 직접 기획&middot;운영하는 멀티시티 페스티벌 투어. Singapore Flagship &middot; May 2027."
+            data-en="A multi-city festival tour, planned and operated by Birch Sound. Singapore Flagship &middot; May 2027">버치사운드가 직접 기획&middot;운영하는 멀티시티 페스티벌 투어. Singapore Flagship &middot; May 2027.</div>
+        </div>
+      </div>
+      <div style="position:relative;overflow:hidden;border:1px solid var(--border)">
+        <div style="height:240px;overflow:hidden">
+          <img src="img/Gemini_Generated_Image_16l3n16l3n16l3n1.png" alt="IP License City" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:left center;filter:brightness(0.6)">
+        </div>
+        <div style="padding:24px">
+          <div class="metatag" style="color:var(--accent);margin-bottom:8px">Track B</div>
+          <div style="font-family:var(--en);font-size:24px;font-weight:700;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:12px">IP Licensing</div>
+          <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+            data-ko="콘텐츠 IP를 글로벌 시장에 라이선싱. 2026"
+            data-en="Content IP licensed into global markets. 2026">콘텐츠 IP를 글로벌 시장에 라이선싱. 2026</div>
+        </div>
+      </div>
+      <div style="position:relative;overflow:hidden;border:1px solid var(--border)">
+        <div style="height:240px;overflow:hidden">
+          <img src="img/Gemini_Generated_Image_vexj7hvexj7hvexj.png" alt="Immersive media art exhibition" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.6)">
+        </div>
+        <div style="padding:24px">
+          <div class="metatag" style="color:var(--accent);margin-bottom:8px">Track C</div>
+          <div style="font-family:var(--en);font-size:24px;font-weight:700;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:12px">Media Art &amp; Tech</div>
+          <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+            data-ko="AI&middot;XR 기반 몰입형 전시와 세계관 확장. 2026."
+            data-en="Immersive AI &middot; XR exhibitions. Worldbuilding beyond the stage. 2026">AI&middot;XR 기반 몰입형 전시와 세계관 확장. 2026.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLAGSHIP IP -->
+<section class="flagship-section fade-up" id="flagship">
+  <div class="content-max">
+    <div class="flagship-meta-row">
+      <div class="metatag">[ 005 &middot; FLAGSHIP IP ]</div>
+    </div>
+
+    <h2 class="flagship-title">FLAGSHIP<br><span class="outline">FESTIVAL.</span></h2>
+    <div class="metatag" style="margin-top:12px;color:var(--ink-2)">(IP title to be announced in July)</div>
+
+    <div class="flagship-grid">
+      <div>
+        <div class="flagship-quote i18n-html"
+          data-ko="&ldquo;십 년의 모든 축적이 만나는 단 하나의 무대.&rdquo;"
+          data-en="&ldquo;Where ten years converge.&rdquo;">&ldquo;십 년의 모든 축적이 만나는 단 하나의 무대.&rdquo;</div>
+        <p class="flagship-desc i18n-html"
+          data-ko="콘텐츠와 자본과 기술이 만나는 단 하나의 무대."
+          data-en="The single stage where content, capital, and technology meet.">콘텐츠와 자본과 기술이 만나는 단 하나의 무대.</p>
+
+        <div style="margin-top:32px">
+          <div class="metatag" style="margin-bottom:12px">[ ARTIST ARCHITECTURE ]</div>
+          <p class="i18n-html" style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)"
+            data-ko="Western Headliner &times; K-Pop Act &times; Local City Act<br>집단적 기억 &times; 현재의 파동 &times; 지역의 정체성"
+            data-en="Western Headliner &times; K-Pop Act &times; Local City Act<br>Collective memory &times; Present wave &times; Local identity">Western Headliner &times; K-Pop Act &times; Local City Act<br>집단적 기억 &times; 현재의 파동 &times; 지역의 정체성</p>
+        </div>
+
+        <div style="margin-top:32px">
+          <div class="metatag" style="margin-bottom:8px">[ PHILOSOPHY ]</div>
+          <p class="i18n" style="font-family:var(--ko);font-size:14px;color:var(--ink-1)"
+            data-ko="경험하지 않으면 설명할 수 없는 무대. 그것이 FLAGSHIP FESTIVAL."
+            data-en="A stage you can't explain without being there. That is our Flagship Festival.">경험하지 않으면 설명할 수 없는 무대. 그것이 FLAGSHIP FESTIVAL.</p>
+        </div>
+
+        <!-- AI Virtual / AR Live / NORY CITY -->
+        <div class="flagship-detail-grid">
+          <div>
+            <div style="position:relative;height:180px;overflow:hidden;margin-bottom:16px">
+              <img src="img/026.png" alt="AI Media Art Stage" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.7)">
+            </div>
+            <div class="metatag" style="color:var(--accent);margin-bottom:6px">AI VIRTUAL</div>
+            <div style="font-family:var(--ko);font-size:13px;line-height:1.6;color:var(--ink-1)" class="i18n"
+              data-ko="AI 생성형 미디어아트와 실시간 무대 연출. 매 공연이 유일한 경험."
+              data-en="AI generative media art and real-time stage direction. Every show is unique.">AI 생성형 미디어아트와 실시간 무대 연출. 매 공연이 유일한 경험.</div>
+          </div>
+          <div>
+            <div style="position:relative;height:180px;overflow:hidden;margin-bottom:16px">
+              <img src="img/006.png" alt="AR Glasses Experience" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.7)">
+            </div>
+            <div class="metatag" style="color:var(--accent);margin-bottom:6px">AR LIVE</div>
+            <div style="font-family:var(--ko);font-size:13px;line-height:1.6;color:var(--ink-1)" class="i18n"
+              data-ko="AR 글래스와 모바일로 무대 위에 덧입혀진 시각적 레이어를 경험."
+              data-en="Experience visual layers overlaid on stage through AR glasses and mobile.">AR 글래스와 모바일로 무대 위에 덧입혀진 시각적 레이어를 경험.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Images -->
+      <div class="flagship-images">
+        <div class="flagship-main-img">
+          <img src="img/033.png" alt="Stadium concert" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.8)">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0.15),rgba(10,10,12,0.55))"></div>
+        </div>
+        <div class="flagship-sub-images">
+          <div style="width:100%;height:200px;position:relative;overflow:hidden">
+            <img src="img/004.png" alt="Red stadium" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.7)">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0.1),rgba(10,10,12,0.55))"></div>
+          </div>
+          <div style="width:100%;height:200px;position:relative;overflow:hidden">
+            <img src="img/007.png" alt="Colorful stadium" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.7)">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0.1),rgba(10,10,12,0.55))"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VISION — full-width, before Contact -->
+<section class="vision-section fade-up">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="metatag" style="color:var(--accent);margin-bottom:28px">[ THE WORLD WE ARE BUILDING ]</div>
+    <h2 style="font-family:var(--en);font-weight:700;font-size:clamp(48px,10vw,120px);letter-spacing:-.04em;line-height:.95;text-transform:uppercase;margin-bottom:48px">THE WORLD<br>WE ARE <span style="font-family:var(--serif);font-style:italic;font-weight:300;color:var(--accent);text-transform:none">Building.</span></h2>
+    <div style="font-family:var(--ko);font-size:clamp(17px,2.5vw,22px);line-height:1.75;color:var(--ink-1);word-break:keep-all">
+      <p class="i18n" data-ko="아시아의 모든 도시가 단 하나의 무대로 연결되고," data-en="Every Asian city, connected to one stage.">아시아의 모든 도시가 단 하나의 무대로 연결되고,</p>
+      <p class="i18n" data-ko="관객이 호흡하는 방식이 곧 작품이 되며," data-en="Audience breath that becomes the work.">관객이 호흡하는 방식이 곧 작품이 되며,</p>
+      <p class="i18n" style="color:var(--accent)"
+        data-ko="음악이 가장 강렬하게 살아 있는 순간을 함께 만드는 세계."
+        data-en="The most alive moment music can make &mdash; together.">음악이 가장 강렬하게 살아 있는 순간을 함께 만드는 세계.</p>
+    </div>
+    <div style="margin-top:48px;font-family:var(--ko);font-size:16px;color:var(--ink-0);font-weight:500" class="i18n"
+      data-ko="그것이 Birch Sound가 만드는 라이브 엔터테인먼트 생태계입니다."
+      data-en="That is the live entertainment ecosystem Birch Sound is building.">그것이 Birch Sound가 만드는 라이브 엔터테인먼트 생태계입니다.</div>
+  </div>
+</section>
+
+<!-- WHY NOW -->
+<section style="padding:120px var(--px);border-top:1px solid var(--border)" class="fade-up">
+  <div class="content-max">
+    <div class="metatag" style="margin-bottom:14px">[ WHY NOW ]</div>
+    <h2 style="font-family:var(--en);font-weight:700;font-size:clamp(48px,8vw,96px);letter-spacing:-.04em;line-height:.95;text-transform:uppercase;margin-bottom:16px">THE MOMENT<br>IS <span style="font-family:var(--serif);font-style:italic;font-weight:300;color:var(--accent);text-transform:none">now.</span></h2>
+    <p style="font-family:var(--ko);font-size:16px;line-height:1.75;color:var(--ink-1);max-width:var(--body-max);margin-bottom:48px;word-break:keep-all" class="i18n"
+      data-ko="세 가지 거대한 변화가 동시에 일어나고 있습니다. 버치사운드는 이 세 개의 파도가 교차하는 지점에 서 있습니다."
+      data-en="Three massive shifts are happening simultaneously. Birch Sound stands at the intersection of these three waves.">세 가지 거대한 변화가 동시에 일어나고 있습니다. 버치사운드는 이 세 개의 파도가 교차하는 지점에 서 있습니다.</p>
+    <div class="why-now-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px">
+      <div style="padding:32px 24px;border:1px solid var(--border)">
+        <div class="metatag" style="color:var(--accent);margin-bottom:16px">[ 01 ]</div>
+        <div style="font-family:var(--en);font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:12px" class="i18n" data-ko="아시아 라이브 시장 폭발" data-en="Asia Live Market Explosion">아시아 라이브 시장 폭발</div>
+        <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+          data-ko="팬데믹 이후 아시아-태평양 라이브 공연 시장은 전례 없는 속도로 회복하고 있습니다. 억눌린 경험의 수요가 폭발하고 있습니다."
+          data-en="Post-pandemic, the APAC live performance market is recovering at unprecedented speed. Pent-up demand for experiences is exploding.">팬데믹 이후 아시아-태평양 라이브 공연 시장은 전례 없는 속도로 회복하고 있습니다. 억눌린 경험의 수요가 폭발하고 있습니다.</div>
+      </div>
+      <div style="padding:32px 24px;border:1px solid var(--border)">
+        <div class="metatag" style="color:var(--accent);margin-bottom:16px">[ 02 ]</div>
+        <div style="font-family:var(--en);font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:12px" class="i18n" data-ko="AI &amp; 버추얼 콘텐츠 르네상스" data-en="AI & Virtual Content Renaissance">AI &amp; 버추얼 콘텐츠 르네상스</div>
+        <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+          data-ko="AI 기반 버추얼 콘텐츠와 인터랙티브 기술은 가장 빠르게 성장하는 포맷입니다. 관객은 소비자에서 참여자로 진화하고 있습니다."
+          data-en="AI-powered virtual content and interactive tech are the fastest-growing formats. Audiences are evolving from consumers to participants.">AI 기반 버추얼 콘텐츠와 인터랙티브 기술은 가장 빠르게 성장하는 포맷입니다. 관객은 소비자에서 참여자로 진화하고 있습니다.</div>
+      </div>
+      <div style="padding:32px 24px;border:1px solid var(--border)">
+        <div class="metatag" style="color:var(--accent);margin-bottom:16px">[ 03 ]</div>
+        <div style="font-family:var(--en);font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:12px" class="i18n" data-ko="글로벌 엔터테인먼트 IP 시대" data-en="Global Entertainment IP Era">글로벌 엔터테인먼트 IP 시대</div>
+        <div style="font-family:var(--ko);font-size:14px;line-height:1.65;color:var(--ink-1)" class="i18n"
+          data-ko="엔터테인먼트 IP가 글로벌 시장에서 독립 자산 카테고리로 부상하고 있습니다. 라이브 IP의 가치가 재평가되고 있습니다."
+          data-en="Entertainment IP is emerging as an independent asset category in global markets. The value of live IP is being reassessed.">엔터테인먼트 IP가 글로벌 시장에서 독립 자산 카테고리로 부상하고 있습니다. 라이브 IP의 가치가 재평가되고 있습니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section fade-up" id="contact">
+  <div class="metatag" style="margin-bottom:28px">[ 006 &middot; CONTACT ]</div>
+  <h2 class="contact-heading">TALK<br>TO <span class="italic-accent">us.</span></h2>
+
+  <div class="contact-ctas">
+    <button class="cta-primary" onclick="openContactModal('business')">[ CONTACT ME &rarr; ]</button>
+    <button class="cta-secondary" onclick="openContactModal('artist')">[ ARTIST &middot; PARTNER ]</button>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-cell">
+      <div class="metatag contact-cell-label">[ SEOUL &middot; HQ ]</div>
+      <div class="i18n-html" style="font-family:var(--ko);font-size:14px;line-height:1.7;color:var(--ink-1)"
+        data-ko="서울시 종로구<br>새문안로 5길 13, 401호"
+        data-en="13, Saemunnan-ro 5-gil,<br>Jongno-gu, Seoul, Korea">서울시 종로구<br>새문안로 5길 13, 401호</div>
+      <div class="metatag i18n" style="margin-top:12px" data-ko="대표 김한수" data-en="CEO Hansoo Kim">대표 김한수</div>
+    </div>
+    <div class="contact-cell">
+      <div class="metatag contact-cell-label">[ CONTACT ]</div>
+      <div style="font-family:var(--mono);font-size:14px;line-height:1.9;color:var(--ink-1)">
+        T &nbsp; 02-548-9300<br>
+        F &nbsp; 070-7507-9300<br>
+        M &nbsp; biz@birchsound.net
+      </div>
+    </div>
+    <div class="contact-cell">
+      <div class="metatag contact-cell-label">[ GLOBAL ]</div>
+      <div style="font-family:var(--en);font-size:14px;line-height:1.9;color:var(--ink-1)">
+        Singapore &mdash; Capital<br>
+        Seoul &mdash; Content<br>
+        Hong Kong &mdash; EnterTech
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div>
+    <div><img src="img/logo-white.png" alt="Birch Sound" style="height:40px;width:auto;margin-bottom:10px"></div>
+    <div class="metatag" style="margin-top:6px">Formerly AKATV &mdash; est. 2015</div>
+  </div>
+  <div class="footer-nav">
+    <a href="#about">About</a>
+    <a href="#business">Business</a>
+    <a href="#flagship">Flagship</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="footer-right">
+    <div>&copy; 2026 Birch Sound Inc.</div>
+    <div style="margin-top:4px">Singapore &middot; Seoul, Korea &middot; Hong Kong</div>
+    <div style="margin-top:2px">biz@birchsound.net</div>
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+// Contact modal
+function openContactModal(type){
+  var m=document.getElementById('contactModal');
+  var label=document.getElementById('modalLabel');
+  var subj=document.getElementById('formSubject');
+  if(type==='artist'){
+    label.textContent='[ ARTIST \u00B7 PARTNER ]';
+    subj.value='Artist / Partner Inquiry';
+  }else{
+    label.textContent='[ CONTACT ]';
+    subj.value='Business Inquiry';
+  }
+  m.style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function closeContactModal(){
+  var m=document.getElementById('contactModal');
+  m.style.display='none';
+  document.body.style.overflow='';
+}
+var _cm=document.getElementById('contactModal');
+if(_cm) _cm.addEventListener('click',function(e){
+  if(e.target===this) closeContactModal();
+});
+
+// Fade-up on scroll
+(function(){
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, {threshold: 0.12, rootMargin: '0px 0px -40px 0px'});
+  document.querySelectorAll('.fade-up').forEach(function(el){ observer.observe(el); });
+})();
+
+// Counter animation
+(function(){
+  var counted = false;
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting && !counted){
+        counted = true;
+        document.querySelectorAll('[data-count]').forEach(function(el){
+          var target = parseInt(el.getAttribute('data-count'), 10);
+          var suffix = el.getAttribute('data-suffix') || '';
+          var duration = 1600;
+          var start = performance.now();
+          function step(now){
+            var elapsed = now - start;
+            var progress = Math.min(elapsed / duration, 1);
+            var eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(eased * target) + suffix;
+            if(progress < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      }
+    });
+  }, {threshold: 0.3});
+  var bar = document.querySelector('.stats-bar');
+  if(bar) observer.observe(bar);
+})();
+
+// Mobile menu
+(function(){
+  var btn = document.getElementById('hamburger');
+  var nav = document.getElementById('navLinks');
+  if(btn && nav){
+    btn.addEventListener('click', function(){ nav.classList.toggle('open'); });
+    nav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ nav.classList.remove('open'); });
+    });
+  }
+})();
+
+// Scroll nav — show after hero
+(function(){
+  var nav = document.getElementById('scrollNav');
+  var hero = document.getElementById('hero');
+  if(!nav || !hero) return;
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting) nav.classList.remove('visible');
+      else nav.classList.add('visible');
+    });
+  }, {threshold: 0.1});
+  observer.observe(hero);
+})();
+
+// Language toggle (KO/EN) — both hero and scroll nav
+(function(){
+  var scrollBtn = document.getElementById('langToggle');
+  var heroBtn = document.getElementById('heroLangToggle');
+  var lang = 'ko';
+  function applyLanguage(targetLang) {
+    document.querySelectorAll('.i18n').forEach(function(el){
+      var text = el.getAttribute('data-' + targetLang);
+      if (text) el.textContent = text;
+    });
+    document.querySelectorAll('.i18n-html').forEach(function(el){
+      var html = el.getAttribute('data-' + targetLang);
+      if (html) el.innerHTML = html;
+    });
+    document.documentElement.lang = targetLang;
+  }
+  function toggle(){
+    lang = lang === 'ko' ? 'en' : 'ko';
+    if(scrollBtn) scrollBtn.textContent = lang === 'ko' ? 'KO / EN' : 'EN / KO';
+    if(heroBtn) heroBtn.textContent = lang === 'ko' ? '[ KO / EN ]' : '[ EN / KO ]';
+    applyLanguage(lang);
+  }
+  if(scrollBtn) scrollBtn.addEventListener('click', toggle);
+  if(heroBtn) heroBtn.addEventListener('click', toggle);
+})();
+</script>
+<!-- Contact Modal -->
+<div id="contactModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:24px">
+  <div class="contact-modal-inner">
+    <button onclick="closeContactModal()" style="position:absolute;top:12px;right:12px;font-size:28px;color:var(--ink-0);cursor:pointer;background:none;border:1px solid var(--border);padding:4px 12px;min-height:44px;min-width:44px;line-height:1">&times;</button>
+    <div class="metatag" style="margin-bottom:24px" id="modalLabel">[ CONTACT ]</div>
+    <form action="https://formsubmit.co/biz@birchsound.net" method="POST">
+      <input type="hidden" name="_subject" id="formSubject" value="Website Inquiry">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://nextsunny-ai.github.io/birchsound-web-3/">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <input name="name" placeholder="Name" required style="background:var(--bg-alt);border:1px solid var(--border);color:var(--ink-0);padding:14px 16px;font-family:var(--ko);font-size:14px;outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <input name="email" type="email" placeholder="Email" required style="background:var(--bg-alt);border:1px solid var(--border);color:var(--ink-0);padding:14px 16px;font-family:var(--ko);font-size:14px;outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <input name="company" placeholder="Company (optional)" style="background:var(--bg-alt);border:1px solid var(--border);color:var(--ink-0);padding:14px 16px;font-family:var(--ko);font-size:14px;outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <textarea name="message" placeholder="Message" rows="5" required style="background:var(--bg-alt);border:1px solid var(--border);color:var(--ink-0);padding:14px 16px;font-family:var(--ko);font-size:14px;resize:vertical;outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        <button type="submit" class="cta-primary" style="width:100%;text-align:center;cursor:pointer">[ SEND &rarr; ]</button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
